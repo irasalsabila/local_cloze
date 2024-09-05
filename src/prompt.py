@@ -21,11 +21,11 @@ example_prompt = PromptTemplate.from_template("""Story Premise: {story_premise}
 Correct Ending: {correct_ending}
 Incorrect Ending: {wrong_ending}""")
 
-example_selector = CustomExampleSelector(sundanese_examples)
+sundanese_example_selector = CustomExampleSelector(sundanese_examples)
 sundanese_overgeneration_prompt = FewShotPromptTemplate(
-    example_selector=example_selector,
+    example_selector=sundanese_example_selector,
     example_prompt=example_prompt,
     prefix="Your task is to write severals triplets of story premises consists of four sentences, wrong ending, and correct ending in Sundanese. Here are some examples:",
     suffix="Please return {n} generated triplets, following the format in the examples, without any additional response.",
     input_variables=["n"]
-)    
+)
