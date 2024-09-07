@@ -1,9 +1,12 @@
 from langchain_core.example_selectors.base import BaseExampleSelector
 import pickle as pkl
+import random
+from langchain_core.prompts.few_shot import FewShotPromptTemplate
+from langchain_core.prompts.prompt import PromptTemplate
 
 sundanese_examples = pkl.load(open('icl_sundanese.pkl', 'rb'))
+javanese_examples = pkl.load(open('icl_javanese.pkl', 'rb'))
 
-import random
 class CustomExampleSelector(BaseExampleSelector):
     def __init__(self, examples):
         self.examples = examples
@@ -13,9 +16,6 @@ class CustomExampleSelector(BaseExampleSelector):
 
     def select_examples(self, n):
         return random.sample(self.examples, 5)
-    
-from langchain_core.prompts.few_shot import FewShotPromptTemplate
-from langchain_core.prompts.prompt import PromptTemplate
 
 example_prompt = PromptTemplate.from_template("""Story Premise: {story_premise}
 Correct Ending: {correct_ending}
@@ -34,11 +34,18 @@ topics = ["Food (e.g.: food souvenir, traditional foods and beverages, eating ha
           "Daily activities (e.g.: morning activities, afternoon activities, evening activities, leisure activities, house, household and transportation)",
           "Socio-religious aspect of life (e.g.: regular religious activities, mystical things, traditional ceremonies, lifestyle, self care, traditional medicine, traditional saying)"]
 
-sundanese_example_selector = CustomExampleSelector(sundanese_examples)
-sundanese_overgeneration_prompt = FewShotPromptTemplate(
-    example_selector=sundanese_example_selector,
-    example_prompt=example_prompt,
-    prefix="Your task is to write severals triplets of story premises consists of four sentences, wrong ending, and correct ending in Sundanese. Include sundanese cultural value in the story with the topic \"{topic}\". Here are some examples of the story format:",
-    suffix="Please generate several triplets, strictly following the format in the examples, do not add bullets or any additional response.",
-    input_variables=["n"]
-)
+# Function to create a FewShotPromptTemplate for any language
+def create_overgeneration_prompt(language, examples, topics):
+    example_selector = CustomExampleSelector(examples)
+    
+    return FewShotPromptTemplate(
+        example_selector=example_selector,
+        example_prompt=example_prompt,
+        prefix=f"Your task is to write several triplets of story premises consisting of four sentences, wrong ending, and correct ending in {language}. Include {language} cultural values in the story with the topic \"{{topic}}\". Here are some examples of the story format:",
+        suffix="Please generate several triplets, strictly following the format in the examples, do not add bullets or any additional response.",
+        input_variables=["n", "topic"]  # Add 'topic' so you can provide it dynamically
+    )
+
+# Create Sundanese and Javanese prompt templates using the function
+sundanese_overgeneration_prompt = create_overgeneration_prompt("Sundanese", sundanese_examples, topics)
+javanese_overgeneration_prompt = create_overgeneration_prompt("Javanese", javanese_examples, topics)
