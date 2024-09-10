@@ -35,7 +35,7 @@ topics = ["Food (e.g.: food souvenir, traditional foods and beverages, eating ha
           "Socio-religious aspect of life (e.g.: regular religious activities, mystical things, traditional ceremonies, lifestyle, self care, traditional medicine, traditional saying)"]
 
 # Function to create a FewShotPromptTemplate for any language
-def create_overgeneration_prompt(language, examples, topics):
+def create_overgeneration_prompt(language, examples):
     example_selector = CustomExampleSelector(examples)
     
     return FewShotPromptTemplate(
@@ -43,15 +43,15 @@ def create_overgeneration_prompt(language, examples, topics):
         example_prompt=example_prompt,
         prefix=f"Your task is to write several triplets of story premises consisting of four sentences, wrong ending, and correct ending in {language}. Include {language} cultural values in the story with the topic \"{{topic}}\". Here are some examples of the story format:",
         suffix="Please generate several triplets, strictly following the format in the examples, do not add bullets or any additional response.",
-        input_variables=["n", "topic"]  # Add 'topic' so you can provide it dynamically
+        input_variables=["topic"]  # Add 'topic' so you can provide it dynamically
     )
 
 # Create Sundanese and Javanese prompt templates using the function
-sundanese_overgeneration_prompt = create_overgeneration_prompt("Sundanese", sundanese_examples, topics)
-javanese_overgeneration_prompt = create_overgeneration_prompt("Javanese", javanese_examples, topics)
+sundanese_overgeneration_prompt = create_overgeneration_prompt("Sundanese", sundanese_examples)
+javanese_overgeneration_prompt = create_overgeneration_prompt("Javanese", javanese_examples)
 
 # Function to create a FewShotPromptTemplate for any language
-def create_overgeneration_prompt_cohere(language, examples, topics):
+def create_overgeneration_prompt_cohere(language, examples):
     example_selector = CustomExampleSelector(examples)
     
     return FewShotPromptTemplate(
@@ -59,9 +59,24 @@ def create_overgeneration_prompt_cohere(language, examples, topics):
         example_prompt=example_prompt,
         prefix=f"Your task is to write three different examples of story premises consisting of four sentences, wrong ending, and correct ending in {language}. Include {language} cultural values in the story with the topic \"{{topic}}\". Here are some examples of the story format:",
         suffix="Please generate three different examples, strictly following the format in the examples, do not add bullets or any additional response.",
-        input_variables=["n", "topic"]  # Add 'topic' so you can provide it dynamically
+        input_variables=["topic"]  # Add 'topic' so you can provide it dynamically
+    )
+
+sundanese_overgeneration_prompt_cohere = create_overgeneration_prompt_cohere("Sundanese", sundanese_examples)
+javanese_overgeneration_prompt_cohere = create_overgeneration_prompt_cohere("Javanese", javanese_examples)
+
+
+def create_overgeneration_prompt_llama(language, examples):
+    example_selector = CustomExampleSelector(examples)
+    
+    return FewShotPromptTemplate(
+        example_selector=example_selector,
+        example_prompt=example_prompt,
+        prefix=f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>Your task is to write three different examples of story premises consisting of four sentences, wrong ending, and correct ending in {language}. Include {language} cultural values in the story with the topic \"{{topic}}\". Here are some examples of the story format:",
+        suffix="Please generate several triplets, strictly following the format in the examples, do not add bullets or any additional response.<|eot_id|><|start_header_id|>assistant<|end_header_id|>",
+        input_variables=["topic"]  # Add 'topic' so you can provide it dynamically
     )
 
 # Create Sundanese and Javanese prompt templates using the function
-sundanese_overgeneration_prompt_cohere = create_overgeneration_prompt_cohere("Sundanese", sundanese_examples, topics)
-javanese_overgeneration_prompt_cohere = create_overgeneration_prompt_cohere("Javanese", javanese_examples, topics)
+sundanese_overgeneration_prompt_llama = create_overgeneration_prompt_llama("Sundanese", sundanese_examples)
+javanese_overgeneration_prompt_llama = create_overgeneration_prompt_llama("Javanese", javanese_examples)
