@@ -94,3 +94,18 @@ def create_overgeneration_prompt_mixtral(language, examples):
 # Create Sundanese and Javanese prompt templates using the function
 sundanese_overgeneration_prompt_mixtral = create_overgeneration_prompt_mixtral("Sundanese", sundanese_examples)
 javanese_overgeneration_prompt_mixtral = create_overgeneration_prompt_mixtral("Javanese", javanese_examples)
+
+def create_overgeneration_prompt_gemma(language, examples):
+    example_selector = CustomExampleSelector(examples)
+    
+    return FewShotPromptTemplate(
+        example_selector=example_selector,
+        example_prompt=example_prompt,
+        prefix=f"<start_of_turn>user\nYour task is to write three different examples of story premises consisting of four sentences, wrong ending, and correct ending in {language}. Include {language} cultural values in the story with the topic \"{{topic}}\". Here are some examples of the story format:",
+        suffix="Please generate several triplets, strictly following the format in the examples, do not add bullets or any additional response.<end_of_turn>\n<start_of_turn>model\n",
+        input_variables=["topic"]  # Add 'topic' so you can provide it dynamically
+    )
+
+# Create Sundanese and Javanese prompt templates using the function
+sundanese_overgeneration_prompt_gemma = create_overgeneration_prompt_gemma("Sundanese", sundanese_examples)
+javanese_overgeneration_prompt_gemma = create_overgeneration_prompt_gemma("Javanese", javanese_examples)
