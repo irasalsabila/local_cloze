@@ -165,3 +165,9 @@ fastText/
 *.DS_Store
 cc.id.300.bin
 cc.id.300.bin.gz
+
+data_ira/
+overgeneration_llama.ipynb 
+overgeneration_mixtral.ipynb
+overgeneration_together.ipynb
+overgeneration_cohere.ipynb
