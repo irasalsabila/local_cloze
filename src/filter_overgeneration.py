@@ -6,7 +6,8 @@ def filter_heuristics(df, df_icl):
         df["premise"].apply(split_premise).apply(pd.Series)
     )
     df.drop(columns=["premise"], inplace=True)
-    df = df[~df.isin(df_icl.to_dict(orient='list')).all(axis=1)] # remove icl duplicates
+    common_columns = df.columns.intersection(df_icl.columns)
+    df = df[~df[common_columns].apply(tuple, axis=1).isin(df_icl[common_columns].apply(tuple, axis=1))]# remove icl duplicates
     df = remove_short_samples(df)
     df = df[
         df.apply(lambda row: len(set(row)) == len(row), axis=1)
