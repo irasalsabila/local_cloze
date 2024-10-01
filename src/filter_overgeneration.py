@@ -2,16 +2,20 @@ import pandas as pd
 
 
 def filter_heuristics(df, df_icl):
+    print("Initial amount ", df.shape)
     df[["sentence_1", "sentence_2", "sentence_3", "sentence_4"]] = (
         df["premise"].apply(split_premise).apply(pd.Series)
     )
-    df.drop(columns=["premise"], inplace=True)
+    df.drop_duplicates(inplace=True)
+    df.drop(columns=["premise"], inplace=True)    
     common_columns = df.columns.intersection(df_icl.columns)
     df = df[~df[common_columns].apply(tuple, axis=1).isin(df_icl[common_columns].apply(tuple, axis=1))]# remove icl duplicates
+    print("Remove duplication (including ICL echoing): ", df.shape)
     df = remove_short_samples(df)
     df = df[
         df.apply(lambda row: len(set(row)) == len(row), axis=1)
     ]  # make sure that each row have a unique column value (story premises are not repeting, incorrect ending and correct ending are differents, and endings does not echo story premises)
+    print("Remove broken examples:", df.shape)
     df = df[
         df.apply(lambda row: remove_samples_containing_instruction_phrases(row), axis=1)
     ]
