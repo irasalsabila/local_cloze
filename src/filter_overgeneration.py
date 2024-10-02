@@ -16,7 +16,7 @@ def filter_heuristics(df, df_icl):
         df.apply(lambda row: len(set(row)) == len(row), axis=1)
     ]  # make sure that each row have a unique column value (story premises are not repeting, incorrect ending and correct ending are differents, and endings does not echo story premises)
     validity_df = df.map(is_valid_sentence)
-    df = df[validity_df.all(axis=1)]
+    df = df[validity_df.all(axis=1)] 
     df = df[df['correct_ending'].apply(lambda x: is_single_sentence(x))]
     # 6. Remove rows where incorrect_ending is None or has more than one sentence
     df = df[df['incorrect_ending'].apply(lambda x: is_single_sentence(x))]
