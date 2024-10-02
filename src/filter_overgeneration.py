@@ -15,10 +15,17 @@ def filter_heuristics(df, df_icl):
     df = df[
         df.apply(lambda row: len(set(row)) == len(row), axis=1)
     ]  # make sure that each row have a unique column value (story premises are not repeting, incorrect ending and correct ending are differents, and endings does not echo story premises)
+    validity_df = df.map(is_valid_sentence)
+    df = df[validity_df.all(axis=1)]
+    df = df[df['correct_ending'].apply(lambda x: is_single_sentence(x))]
+    # 6. Remove rows where incorrect_ending is None or has more than one sentence
+    df = df[df['incorrect_ending'].apply(lambda x: is_single_sentence(x))]
+    # Filter rows where all cells in the row are True (i.e., all cells contain a valid sentence)
     print("Remove broken examples:", df.shape)
     df = df[
         df.apply(lambda row: remove_samples_containing_instruction_phrases(row), axis=1)
     ]
+    
     return df
 
 
@@ -51,7 +58,6 @@ def remove_short_samples(df):
         & (df["incorrect_ending"].str.len() > 5)
     ]
 
-
 def remove_samples_containing_instruction_phrases(row):
     INSTRUCTION_PHRASES = [
         "please generate" "write several triplets",
@@ -65,3 +71,18 @@ def remove_samples_containing_instruction_phrases(row):
         if any(phrase in str(col) for phrase in INSTRUCTION_PHRASES):
             return False
     return True
+
+import re
+# Function to check if a string is a valid sentence (not just punctuation or quotes)
+def is_valid_sentence(sentence):
+    return bool(re.search(r'\w', sentence))  # Returns True if there's at least one word character
+
+
+# Function to check if an ending has more than one sentence
+def is_single_sentence(ending):
+    if pd.isna(ending):  # Check if the ending is NaN
+        return False
+    sentences = ending.split('.')
+    # Strip whitespace and filter out empty sentences
+    sentences = [sentence.strip() for sentence in sentences if sentence.strip()]
+    return len(sentences) == 1
