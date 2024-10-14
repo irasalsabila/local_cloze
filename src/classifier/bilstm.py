@@ -322,5 +322,7 @@ for num_sent in [1, 2, 3, 4]:
     print("Test set accuracy", test_score)
     print("-------------------------------------------")
     scores[num_sent] = test_score
-import pandas as pd
-pd.DataFrame(scores).to_csv(f'result/bilstm_scores_{args.train_set}.csv',index=False)
+
+with open(f"result/bilstm_{train_set}_scores.txt", 'w') as f:
+    for k, v in scores.items():
+        f.write(f"{k}: {v}\n")
