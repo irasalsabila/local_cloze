@@ -111,26 +111,11 @@ def model_with_fasttext(train_sent, test_sent, \
 
         sent_model.compile(loss=bce, optimizer='adam')
 
-        callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
+        callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=args.patience)
+        sent_model.fit([train_sent, train_denom], [train_label], batch_size=args.batch_size, epochs=args.iteration, shuffle=True, verbose=True, callback=callback)
 
-
-        best_acc_dev=0.0; best_acc_test=0.0; patience = 0
-        for i in range(args.iterations):
-            if patience == args.patience:
-                break
-            sent_model.fit([train_sent, train_denom], [train_label], batch_size=args.batch_size, epochs=1, shuffle=True, verbose=True)
-            
-            acc_dev = get_accuracy(prob_distrib, dev_label)
-            if acc_dev > best_acc_dev:
-                print('Epoch ' + str(i) +' has better dev acc: '+ str(acc_dev))
-                best_acc_dev = acc_dev
-                patience = 0
-                #Predict Test
-                prob_distrib = sent_model.predict([test_sent, test_denom], batch_size=1000)
-                best_acc_test = get_accuracy(prob_distrib, test_label)
-                print('Epoch ' + str(i) +' test acc: '+ str(best_acc_test))
-            else:
-                patience += 1
+        prob_distrib = sent_model.predict([test_sent, test_denom], batch_size=1000)
+        best_acc_test = get_accuracy(prob_distrib, test_label)
     
     print('Test Acc:', best_acc_test)
     print('-----------------------------------------------------------------------------------')
