@@ -290,7 +290,7 @@ args_parser.add_argument(
     "--patience", type=int, default=20, help="patience count for early stopping"
 )
 args_parser.add_argument("--iterations", type=int, default=100, help="total epoch")
-args_parser.add_argument("--batch_size", type=int, default=8, help="total batch size")
+args_parser.add_argument("--batch_size", type=int, default=20, help="total batch size")
 args_parser.add_argument(
     "--max_token_sent", type=int, default=30, help="maximum word allowed for 1 sent"
 )
