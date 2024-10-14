@@ -290,7 +290,7 @@ args_parser.add_argument(
     "--patience", type=int, default=20, help="patience count for early stopping"
 )
 args_parser.add_argument("--iterations", type=int, default=100, help="total epoch")
-args_parser.add_argument("--batch_size", type=int, default=20, help="total batch size")
+args_parser.add_argument("--batch_size", type=int, default=8, help="total batch size")
 args_parser.add_argument(
     "--max_token_sent", type=int, default=30, help="maximum word allowed for 1 sent"
 )
@@ -301,19 +301,26 @@ args_parser.add_argument("--seed", type=int, default=1, help="random seed")
 
 args = args_parser.parse_args()
 
+scores = {}
 for num_sent in [1, 2, 3, 4]:
 
     args.num_sent = num_sent
     set_seed(args.seed)
     trainset = read_data(f"{args.train_path}/jvsu_{args.train_set}.csv", args.num_sent)
+    print("Train set loaded")
     assert args.test_language in ["su", "jv"]
     if args.test_language == "su":
         testset = read_data("../../dataset/test/test_su.csv", args.num_sent)
     else:
         testset = read_data("../../dataset/test/test_jv.csv", args.num_sent)
+    print("test set loaded")
     train_dataset = preprocess(args, trainset[0], trainset[1])
     test_dataset = preprocess(args, testset[0], testset[1])
+    print("data preprocessed")
     test_score = train_and_test_fasttext(train_dataset, test_dataset, args)
     print("Num Sent:", num_sent)
     print("Test set accuracy", test_score)
     print("-------------------------------------------")
+    scores[num_sent] = test_score
+import pandas as pd
+pd.DataFrame(scores).to_csv(f'result/bilstm_scores_{args.train_set}.csv',index=False)
