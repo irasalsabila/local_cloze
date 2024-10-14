@@ -171,3 +171,8 @@ overgeneration_llama.ipynb
 overgeneration_mixtral.ipynb
 overgeneration_together.ipynb
 overgeneration_cohere.ipynb
+
+
+bangkit/
+dataset/cc.jv.300.bin
+jvsu_cloze_env/
