@@ -277,7 +277,8 @@ bertdata = BertData(args)
 
 scores = {}
 for num_sent in range(1, args.num_sent + 1):
-    trainset = read_data(f"{args.train_path}/id_jvsu_{args.train_set}.csv", args.num_sent)
+    # trainset = read_data(f"{args.train_path}/id_jvsu_{args.train_set}.csv", args.num_sent)
+    trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
     print("Train set loaded")
 
     assert(args.test_language in ['su', 'jv'])
