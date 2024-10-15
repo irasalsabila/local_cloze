@@ -224,6 +224,7 @@ class Args:
     def __init__(self):
         args_parser = argparse.ArgumentParser()
         args_parser.add_argument('--train_path', default='../../dataset/train/', help='path to train set')
+        args_parser.add_argument("--train_set", default="gpt4o", help="train set to choose")
         args_parser.add_argument('--test_language', default='jv', help='test set language')
         args_parser.add_argument('--num_sent', type=int, default=4, help='number of sentence in context')
         args_parser.add_argument('--max_token_chat', type=int, default=450, help='max token chat for preprocessing')
@@ -274,17 +275,22 @@ set_seed(args)
 
 bertdata = BertData(args)
 
+scores = {}
 for num_sent in range(1, args.num_sent + 1):
-    trainset = read_data(f'{args.train_path}', args.num_sent)
+    trainset = read_data(f"{args.train_path}/id_jvsu_{args.train_set}.csv", args.num_sent)
+    print("Train set loaded")
 
     assert(args.test_language in ['su', 'jv'])
     if args.test_language == 'jv':
         testset = read_data('../../dataset/test/test_jv.csv', args.num_sent)
     else:
         testset = read_data('../../dataset/test/test_su.csv', args.num_sent)
-    
+    print("Test set loaded")
+
+
     train_dataset = bertdata.preprocess(trainset[0], trainset[1], trainset[2])
     test_dataset = bertdata.preprocess(testset[0], testset[1], testset[2])
+    print("Data preprocessed")
 
     model = Model(args, args.device)
     model.to(args.device)
@@ -295,3 +301,10 @@ for num_sent in range(1, args.num_sent + 1):
     print(f'Test set accuracy: {best_acc_test}')
     print('-------------------------------------------')
 
+    # Save best accuracy and loss in the scores dictionary
+    scores[num_sent] = {'best_acc_test': best_acc_test, 'best_loss': best_loss}
+
+# Write the scores to a text file
+with open(f"result/bert_{args.train_set}_scores.txt", 'w') as f:
+    for num_sent, score in scores.items():
+        f.write(f"Num Sentences: {num_sent}, Best Accuracy: {score['best_acc_test']}, Best Loss: {score['best_loss']}\n")
