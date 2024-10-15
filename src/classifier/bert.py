@@ -223,7 +223,7 @@ def train(args, train_dataset, test_dataset, model):
 class Args:
     def __init__(self):
         args_parser = argparse.ArgumentParser()
-        args_parser.add_argument('--train_path', default='../../dataset/', help='path to train set')
+        args_parser.add_argument('--train_path', default='../../dataset/train/', help='path to train set')
         args_parser.add_argument('--test_language', default='jv', help='test set language')
         args_parser.add_argument('--num_sent', type=int, default=4, help='number of sentence in context')
         args_parser.add_argument('--max_token_chat', type=int, default=450, help='max token chat for preprocessing')
@@ -279,9 +279,9 @@ for num_sent in range(1, args.num_sent + 1):
 
     assert(args.test_language in ['su', 'jv'])
     if args.test_language == 'jv':
-        testset = read_data('../../dataset/test_jv.csv', args.num_sent)
+        testset = read_data('../../dataset/test/test_jv.csv', args.num_sent)
     else:
-        testset = read_data('../../dataset/test_su.csv', args.num_sent)
+        testset = read_data('../../dataset/test/test_su.csv', args.num_sent)
     
     train_dataset = bertdata.preprocess(trainset[0], trainset[1], trainset[2])
     test_dataset = bertdata.preprocess(testset[0], testset[1], testset[2])
