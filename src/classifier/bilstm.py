@@ -323,6 +323,6 @@ for num_sent in [1, 2, 3, 4]:
     print("-------------------------------------------")
     scores[num_sent] = test_score
 
-with open(f"result/bilstm_{train_set}_scores.txt", 'w') as f:
+with open(f"result/bilstm_{args.train_set}_scores.txt", 'w') as f:
     for k, v in scores.items():
         f.write(f"{k}: {v}\n")
