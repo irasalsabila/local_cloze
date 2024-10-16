@@ -322,6 +322,4 @@ for num_sent in range(0, args.num_sent + 1):
 # Write the scores to a text file
 with open(f"result/bert_{args.train_set}_scores.txt", 'w') as f:
     for num_sent, score in scores.items():
-        f.write(f"Num Sentences: {num_sent}, 
-                Best Accuracy: {score['best_acc_test']}, 
-                Best Loss: {score['best_loss']}\n")
+        f.write(f"Num Sentences: {num_sent}, Best Accuracy: {score['best_acc_test']}, Best Loss: {score['best_loss']}\n")
