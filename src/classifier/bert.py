@@ -128,29 +128,27 @@ def prediction(dataset, model, args):
 
 def read_data(fname, num_sent=4):
     contexts = []
+    endings = []
     labels = []
     data = pd.read_csv(fname)
     for idx, row in data.iterrows():
         sents = []
-        for i in [4, 3, 2, 1]:
+        for i in [4,3,2,1]:
             if len(sents) == num_sent:
                 break
-            sents.insert(0, row[f"sentence_{i}"])
-        ending1 = row["correct_ending"]
-        ending2 = row["incorrect_ending"]
-
-        if num_sent == 0:
-            contexts.append([ending1])
-        else:
-            contexts.append(sents + [ending1])
+            sents.insert(0, row[f'sentence_{i}'])
+        context = ' '.join(sents) 
+        ending1 = row['correct_ending']
+        ending2 = row['incorrect_ending']
+        
+        contexts.append(context)
+        endings.append(ending1)
         labels.append(1)
         
-        if num_sent == 0:
-            contexts.append([ending2])
-        else:
-            contexts.append(sents + [ending2])
+        contexts.append(context)
+        endings.append(ending2)
         labels.append(0)
-    return contexts, labels
+    return contexts, endings, labels
 
 def train(args, train_dataset, test_dataset, model):
     no_decay = ["bias", "LayerNorm.weight"]
@@ -291,7 +289,7 @@ bertdata = BertData(args)
 
 scores = {}
 for num_sent in range(0, args.num_sent + 1):
-    # trainset = read_data(f"{args.train_path}/id_jvsu_{args.train_set}.csv", args.num_sent)
+    args.num_sent = num_sent
     trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
     print("Train set loaded")
 

@@ -136,7 +136,7 @@ def read_data(fname, num_sent=4):
             if len(sents) == num_sent:
                 break
             sents.insert(0, row[f'sentence_{i}'])
-        context = ' '.join(sents) # row['Kalimat-1'] +' '+ row['Kalimat-2'] +' '+ row['Kalimat-3'] +' '+ row['Kalimat-4']
+        context = ' '.join(sents) 
         ending1 = row['correct_ending']
         ending2 = row['incorrect_ending']
         
@@ -272,8 +272,8 @@ set_seed(args)
 xlmrdata = XLMRData(args)
 
 scores = {}
-for num_sent in range(1, args.num_sent + 1):
-    # trainset = read_data(f"{args.train_path}/id_jvsu_{args.train_set}.csv", args.num_sent)
+for num_sent in range(0, args.num_sent + 1):
+    args.num_sent = num_sent
     trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
     print("Train set loaded")
 
