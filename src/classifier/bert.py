@@ -303,8 +303,8 @@ for num_sent in range(0, args.num_sent + 1):
     print("Test set loaded")
 
 
-    train_dataset = bertdata.preprocess(trainset[0], trainset[1], trainset[2])
-    test_dataset = bertdata.preprocess(testset[0], testset[1], testset[2])
+    train_dataset = bertdata.preprocess(trainset[0], trainset[1])
+    test_dataset = bertdata.preprocess(testset[0], testset[1])
     print("Data preprocessed")
 
     model = Model(args, args.device)
