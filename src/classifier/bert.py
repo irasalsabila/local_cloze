@@ -6,7 +6,7 @@ import pandas as pd
 import torch, os
 import torch.nn as nn
 from sklearn.metrics import f1_score, accuracy_score
-from transformers import BertTokenizer, BertModel, BertConfig
+from transformers import AutoTokenizer, AutoModel, BertConfig
 from transformers import AdamW, get_linear_schedule_with_warmup
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ def set_seed(args):
 
 class BertData():
     def __init__(self, args):
-        self.tokenizer = BertTokenizer.from_pretrained(args.model_type, do_lower_case=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(args.model_type, do_lower_case=True)
         self.sep_token = '[SEP]'
         self.cls_token = '[CLS]'
         self.pad_token = '[PAD]'
@@ -84,7 +84,7 @@ class Model(nn.Module):
         super(Model, self).__init__()
         self.args = args
         self.device = device
-        self.bert = BertModel.from_pretrained(args.model_type)
+        self.bert = AutoModel.from_pretrained(args.model_type)
         self.linear = nn.Linear(self.bert.config.hidden_size, 1)
         self.dropout = nn.Dropout(0.2)
         self.sigmoid = nn.Sigmoid()
@@ -128,27 +128,29 @@ def prediction(dataset, model, args):
 
 def read_data(fname, num_sent=4):
     contexts = []
-    endings = []
     labels = []
     data = pd.read_csv(fname)
     for idx, row in data.iterrows():
         sents = []
-        for i in [4,3,2,1]:
+        for i in [4, 3, 2, 1]:
             if len(sents) == num_sent:
                 break
-            sents.insert(0, row[f'sentence_{i}'])
-        context = ' '.join(sents) # row['Kalimat-1'] +' '+ row['Kalimat-2'] +' '+ row['Kalimat-3'] +' '+ row['Kalimat-4']
-        ending1 = row['correct_ending']
-        ending2 = row['incorrect_ending']
-        
-        contexts.append(context)
-        endings.append(ending1)
+            sents.insert(0, row[f"sentence_{i}"])
+        ending1 = row["correct_ending"]
+        ending2 = row["incorrect_ending"]
+
+        if num_sent == 0:
+            contexts.append([ending1])
+        else:
+            contexts.append(sents + [ending1])
         labels.append(1)
         
-        contexts.append(context)
-        endings.append(ending2)
+        if num_sent == 0:
+            contexts.append([ending2])
+        else:
+            contexts.append(sents + [ending2])
         labels.append(0)
-    return contexts, endings, labels
+    return contexts, labels
 
 def train(args, train_dataset, test_dataset, model):
     no_decay = ["bias", "LayerNorm.weight"]
@@ -175,49 +177,61 @@ def train(args, train_dataset, test_dataset, model):
     logger.info("  Patience  = %d", args.patience)
 
     set_seed(args)
+    
     tr_loss = 0.0
     global_step = 1
-    best_loss = float('inf')  # Use loss for early stopping
+    best_loss = float('inf')  # Use this for early stopping
     best_acc_test = 0
-    cur_patience = 0
-    for i in range(int(args.num_train_epochs)):
+    cur_patience = 0  # This will count how many epochs we have seen without improvement
+    
+    # Start training loop
+    for epoch in range(int(args.num_train_epochs)):
         random.shuffle(train_dataset)
         epoch_loss = 0.0
+        
+        # Iterate over batches
         for j in range(0, len(train_dataset), args.batch_size):
             src, seg, label, mask_src = Batch(train_dataset, j, args.batch_size, args.device).get()
-            model.train()
+            model.train()  # Set model to training mode
             loss = model.get_loss(src, seg, label, mask_src)
-            loss = loss.sum()/args.batch_size
+            loss = loss.sum()/args.batch_size  # Normalize loss by batch size
+            
             if args.n_gpu > 1:
-                loss = loss.mean()  # mean() to average on multi-gpu parallel (not distributed) training
+                loss = loss.mean()  # Average loss on multi-gpu if needed
+            
+            # Backpropagation and optimization
             loss.backward()
-
-            tr_loss += loss.item()
-            epoch_loss += loss.item()
             torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
             optimizer.step()
             scheduler.step()  # Update learning rate schedule
             model.zero_grad()
+            
+            tr_loss += loss.item()
+            epoch_loss += loss.item()
             global_step += 1
 
-        avg_epoch_loss = epoch_loss / global_step
-        logger.info("Finish epoch = %s, loss_epoch = %s", i + 1, avg_epoch_loss)
+        # Calculate average loss for this epoch and format to 5 decimals
+        avg_epoch_loss = round(epoch_loss / global_step, 5)
+        logger.info(f"Finish epoch {epoch + 1}, average loss = {avg_epoch_loss:.5f}")
 
-        # Check for early stopping based on loss
+        # Check early stopping criteria
         if avg_epoch_loss < best_loss:
+            # If the current epoch's loss is better than the best so far, update
             best_loss = avg_epoch_loss
             test_acc, test_pred = prediction(test_dataset, model, args)
-            best_acc_test = test_acc
-            cur_patience = 0
-            logger.info("Better loss, BEST loss = %s & BEST Acc in test = %s.", best_loss, best_acc_test)
+            best_acc_test = round(test_acc, 5)  # Format accuracy to 5 decimals
+            cur_patience = 0  # Reset patience as we have improvement
+            logger.info(f"New best loss: {best_loss:.5f}, best test accuracy: {best_acc_test:.5f}")
         else:
+            # If no improvement, increase patience
             cur_patience += 1
-            if cur_patience == args.patience:
-                logger.info("Early Stopping, BEST loss = %s & BEST Acc in test = %s.", best_loss, best_acc_test)
-                break
-            else:
-                logger.info("No improvement, BEST loss = %s & BEST Acc in test = %s.", best_loss, best_acc_test)
-
+            logger.info(f"No improvement, patience: {cur_patience}/{args.patience}")
+        
+        # Stop training if patience exceeds threshold
+        if cur_patience >= args.patience:
+            logger.info(f"Early stopping triggered. Best loss: {best_loss:.5f}, Best test accuracy: {best_acc_test:.5f}")
+            break  # Stop training when patience limit is reached
+    
     return global_step, tr_loss / global_step, best_loss, best_acc_test, test_pred
     
 class Args:
@@ -276,7 +290,7 @@ set_seed(args)
 bertdata = BertData(args)
 
 scores = {}
-for num_sent in range(1, args.num_sent + 1):
+for num_sent in range(0, args.num_sent + 1):
     # trainset = read_data(f"{args.train_path}/id_jvsu_{args.train_set}.csv", args.num_sent)
     trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
     print("Train set loaded")
@@ -308,4 +322,6 @@ for num_sent in range(1, args.num_sent + 1):
 # Write the scores to a text file
 with open(f"result/bert_{args.train_set}_scores.txt", 'w') as f:
     for num_sent, score in scores.items():
-        f.write(f"Num Sentences: {num_sent}, Best Accuracy: {score['best_acc_test']}, Best Loss: {score['best_loss']}\n")
+        f.write(f"Num Sentences: {num_sent}, 
+                Best Accuracy: {score['best_acc_test']}, 
+                Best Loss: {score['best_loss']}\n")
