@@ -260,10 +260,16 @@ def read_data(fname, num_sent=4):
         ending1 = row["correct_ending"]
         ending2 = row["incorrect_ending"]
 
-        contexts.append(sents + [ending1])
+        if num_sent == 0:
+            contexts.append([ending1])
+        else:
+            contexts.append(sents + [ending1])
         labels.append(1)
-
-        contexts.append(sents + [ending2])
+        
+        if num_sent == 0:
+            contexts.append([ending2])
+        else:
+            contexts.append(sents + [ending2])
         labels.append(0)
     return contexts, labels
 
@@ -302,11 +308,11 @@ args_parser.add_argument("--seed", type=int, default=1, help="random seed")
 args = args_parser.parse_args()
 
 scores = {}
-for num_sent in [1, 2, 3, 4]:
+for num_sent in [0, 1, 2, 3, 4]:
 
     args.num_sent = num_sent
     set_seed(args.seed)
-    trainset = read_data(f"{args.train_path}/jvsu_{args.train_set}.csv", args.num_sent)
+    trainset = read_data(f"{args.train_path}/id_jvsu_{args.train_set}.csv", args.num_sent)
     print("Train set loaded")
     assert args.test_language in ["su", "jv"]
     if args.test_language == "su":
