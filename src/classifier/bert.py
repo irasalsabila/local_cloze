@@ -232,6 +232,15 @@ def train(args, train_dataset, test_dataset, model):
     
     return global_step, tr_loss / global_step, best_loss, best_acc_test, test_pred
     
+# Function to get a unique file name
+def get_unique_filename(base_filename):
+    counter = 1
+    filename = base_filename
+    while os.path.exists(filename):
+        filename = f"{base_filename.rsplit('.', 1)[0]}_{counter}.txt"
+        counter += 1
+    return filename
+
 class Args:
     def __init__(self):
         args_parser = argparse.ArgumentParser()
@@ -317,7 +326,10 @@ for num_sent in range(0, args.num_sent + 1):
     # Save best accuracy and loss in the scores dictionary
     scores[num_sent] = {'best_acc_test': best_acc_test, 'best_loss': best_loss}
 
-# Write the scores to a text file
-with open(f"result/bert_{args.train_set}_scores.txt", 'w') as f:
+# Generate unique file name if the file already exists
+output_filename = get_unique_filename(f"result/bert_{args.train_set}_scores.txt")
+
+# Write the scores to a text file with the unique name
+with open(output_filename, 'w') as f:
     for num_sent, score in scores.items():
         f.write(f"Num Sentences: {num_sent}, Best Accuracy: {score['best_acc_test']}, Best Loss: {score['best_loss']}\n")
