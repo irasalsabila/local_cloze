@@ -1,0 +1,5 @@
+Num Sentences: 0, Best Accuracy: 0.616, Best Loss: 0.00025
+Num Sentences: 1, Best Accuracy: 0.638, Best Loss: 0.00022
+Num Sentences: 2, Best Accuracy: 0.598, Best Loss: 0.00013
+Num Sentences: 3, Best Accuracy: 0.634, Best Loss: 0.0002
+Num Sentences: 4, Best Accuracy: 0.642, Best Loss: 0.00012
