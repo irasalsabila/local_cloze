@@ -1,85 +1,52 @@
-# JavaCloze & SundaCloze
+# JavaCloze & SundaCloze: Story Cloze Test for Indonesian Local Languages
 
-**Utilizing Synthetic Story Cloze Data for Commonsense Story Reasoning in Indonesian Local Languages**
+## Overview
 
----
-
-This repository contains the code and datasets for the paper:
-
-> **JavaCloze & SundaCloze: Utilizing Synthetic Story Cloze Data for Commonsense Story Reasoning in Indonesian Local Languages**
-
----
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Datasets](#datasets)
-  - [Evaluation Datasets](#evaluation-datasets)
-  - [Synthetic Training Datasets](#synthetic-training-datasets)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-  - [Data Preparation](#data-preparation)
-  - [Training Models](#training-models)
-  - [Evaluating Models](#evaluating-models)
-- [Results](#results)
-- [Contributors](#contributors)
-- [Citation](#citation)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-
----
-
-## Introduction
-
-Story comprehension in NLP involves understanding complex causal and temporal relationships within narratives. While significant progress has been made in English, low-resource languages like Javanese and Sundanese lack sufficient datasets for such tasks due to the challenges and costs associated with manual data collection and annotation.
-
-This project extends the Story Cloze Test framework to Javanese and Sundanese by:
-
-- Creating evaluation datasets verified by native speakers.
-- Generating synthetic training datasets using Large Language Models (LLMs).
-- Evaluating machine learning models on these datasets to explore commonsense reasoning capabilities in low-resource languages.
-
----
+This repository contains the source code and related assets for the paper "JavaCloze & SundaCloze: Utilizing Synthetic Story Cloze Data for Commonsense Story Reasoning in Indonesian Local Languages." The paper presents our work on expanding the Story Cloze Test to the Javanese and Sundanese languages, with datasets that help evaluate commonsense reasoning through narrative understanding. We employ synthetic data generation with the assistance of large language models (LLMs) to create training datasets and explore the application of commonsense reasoning in low-resource language contexts.
 
 ## Datasets
 
-### Evaluation Datasets
+### Story Cloze Datasets
+We constructed two main datasets for the Story Cloze Test in Javanese and Sundanese:
 
-- **Size**: 500 manually verified samples for each language.
-- **Format**: Each sample consists of a four-sentence premise and two possible endings (one correct, one incorrect).
-- **Creation**: Translated and culturally adapted from the IndoCloze dataset, followed by a rigorous two-stage quality control process by native speakers.
+1. **Evaluation Dataset**: Consists of 500 samples that have undergone rigorous quality control by native speakers. This dataset is manually verified to ensure accuracy, fluency, and cultural relevance.
 
-### Synthetic Training Datasets
+2. **Training Dataset**: Created synthetically using six different LLMs, including GPT-4o, Claude, Cohere Command R Plus, Mixtral, Gemma2, and Llama3.1. Each LLM generated 1,000 samples, providing six distinct training sets used in the model training process.
 
-Generated using six different LLMs:
+For details about dataset construction and quality assurance, refer to the paper's dataset section.
 
-- **Closed-Weight Models**:
-  - GPT-4o
-  - Cohere Command R Plus
-  - Claude 3 Opus
-- **Open-Weight Models**:
-  - Llama 3.1-70B
-  - Gemma2
-  - Mixtral
+## Models
 
-**Each dataset contains 1,000 samples per language.**
+We experimented with several machine learning and transformer-based models to evaluate their performance on the Story Cloze Test in Javanese and Sundanese. These models include:
 
----
+- **Pre-trained Language Models (PLMs)**: Fine-tuned Javanese BERT, Sundanese RoBERTa, and XLM-R.
+- **Hierarchical BiLSTM**: A two-level BiLSTM model using FastText embeddings.
+- **Similarity Models**: N-gram overlap-based classification and FastText similarity.
 
-## Getting Started
+## Repository Structure
+
+- **dataset/**: Contains the evaluation and training datasets in Javanese and Sundanese.
+- **src/**: Code and configurations for the machine learning models.
+
+## How to Use
 
 ### Prerequisites
 
-- Python 3.7 or higher
-- CUDA-enabled GPU (for training models)
-- Internet connection (for accessing APIs of certain LLMs)
+- Python 3.8+
+- Required Python Packages can be installed using `pip install -r requirements.txt` (it is recommended to use a virtual environment)
+- [Fasttext Model for Javanese and Sundanese](https://fasttext.cc/docs/en/crawl-vectors.html)
+- Access to LLM APIs (OpenAI, Cohere, Anthropic, etc.) if generating synthetic datasets
 
-### Installation
+Jupyter notebooks in the **notebooks/** folder to see detailed data analysis and visualization of the model results.
 
-1. **Clone the repository**
+## Acknowledgements
 
-   ```bash
-   git clone https://github.com/yourusername/JavaCloze-SundaCloze.git
-   cd JavaCloze-SundaCloze
+This work was conducted at Mohamed bin Zayed University of Artificial Intelligence (MBZUAI). Special thanks to our annotators for their contributions to ensuring the quality of our evaluation datasets.
+
+## Contact
+
+For any questions or collaboration inquiries, please contact:
+
+- Salsabila Zahirah Pranida - salsabila.pranida@mbzuai.ac.ae
+- Rifo Ahmad Genadi - rifo.genadi@mbzuai.ac.ae
+
