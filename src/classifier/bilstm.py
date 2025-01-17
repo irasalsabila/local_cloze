@@ -187,18 +187,28 @@ def model_with_fasttext(
             split_idx = int(len(train_sent) * 0.8)
             actual_train_sent = train_sent[:split_idx]
             actual_train_denom = train_denom[:split_idx]
+            actual_train_label = train_label[:split_idx]
             dev_sent = train_sent[split_idx:]
             dev_denom = train_denom[split_idx:]
+            dev_label = train_label[split_idx:]
+            if len(actual_train_sent) % 2 == 1:
+                actual_train_sent = actual_train_sent[:-1]
+                actual_train_denom = actual_train_denom[:-1]
+                actual_train_label = actual_train_label[:-1]
+            if len(dev_sent) % 2 == 1:
+                dev_label = dev_label[1:]
+                dev_sent = dev_sent[1:]
+                dev_denom = dev_denom[1:]
             sent_model.fit(
-                [train_sent, train_denom],
-                [train_label],
+                [actual_train_sent, actual_train_denom],
+                [actual_train_label],
                 batch_size=args.batch_size,
                 epochs=1,
                 shuffle=True,
                 verbose=True,
             )
             prob_distrib = sent_model.predict([dev_sent, dev_denom], batch_size=1000)
-            acc_dev = get_accuracy(prob_distrib, train_label[split_idx:])
+            acc_dev = get_accuracy(prob_distrib, dev_label)
             if acc_dev > best_acc_dev:
                 best_acc_dev = acc_dev
                 patience = 0
@@ -320,7 +330,7 @@ args_parser.add_argument(
     help="number of class, we set 1 here because we use sigmoid",
 )
 args_parser.add_argument(
-    "--patience", type=int, default=20, help="patience count for early stopping"
+    "--patience", type=int, default=5, help="patience count for early stopping"
 )
 args_parser.add_argument("--iterations", type=int, default=100, help="total epoch")
 args_parser.add_argument("--batch_size", type=int, default=20, help="total batch size")
