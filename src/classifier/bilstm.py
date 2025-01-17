@@ -25,9 +25,21 @@ os.environ["MKL_NUM_THREADS"] = "4"
 os.environ["GOTO_NUM_THREADS"] = "4"
 os.environ["OMP_NUM_THREADS"] = "4"
 
+print("Available GPUs:", tf.config.list_physical_devices('GPU'))
+
 import fasttext.util
 
-# fasttext.util.download_model('su', if_exists='ignore')  # English
+fasttext.util.download_model('su', if_exists='ignore')
+fasttext.util.download_model('jv', if_exists='ignore')
+
+# Function to get a unique file name
+def get_unique_filename(base_filename):
+    counter = 1
+    filename = base_filename
+    while os.path.exists(filename):
+        filename = f"{base_filename.rsplit('.', 1)[0]}_{counter}.txt"
+        counter += 1
+    return filename
 
 
 def set_seed(seed_value):
@@ -76,10 +88,8 @@ def model_with_fasttext(
     tokenizer,
     args,
 ):
-    if args.test_language == "su":
-        fasttext_model = fasttext.load_model("cc.su.300.bin")
-    else:
-        fasttext_model = fasttext.load_model("cc.jv.300.bin")
+    fasttext_model_su = fasttext.load_model("cc.su.300.bin")
+    fasttext_model_jv = fasttext.load_model("cc.jv.300.bin")
     word_index = tokenizer.word_index
     nb_words = min(args.max_nb_words, len(word_index))
     print("Total words in dict:", nb_words)
@@ -87,9 +97,12 @@ def model_with_fasttext(
     for word, i in word_index.items():
         if i > args.max_nb_words:
             continue
-        embedding_vector = fasttext_model.get_word_vector(word)
-        if embedding_vector is not None:
-            embedding_matrix[i] = embedding_vector
+        embedding_vector_su = fasttext_model_su.get_word_vector(word)
+        embedding_vector_jv = fasttext_model_jv.get_word_vector(word)
+        if embedding_vector_su is not None:
+            embedding_matrix[i] = embedding_vector_su
+        elif embedding_vector_jv is not None:
+            embedding_matrix[i] = embedding_vector_jv
         else:
             embedding_matrix[i] = np.random.normal(-4.2, 4.2, args.embedding_dim)
     print("Finish to read Fast Text Embedding")
@@ -166,18 +179,32 @@ def model_with_fasttext(
 
         sent_model.compile(loss=bce, optimizer="adam", jit_compile=False)
 
-        callback = keras.callbacks.EarlyStopping(
-            monitor="loss", patience=args.patience
-        )
-        sent_model.fit(
-            [train_sent, train_denom],
-            [train_label],
-            batch_size=args.batch_size,
-            epochs=args.iterations,
-            shuffle=True,
-            verbose=True,
-            callbacks=callback,
-        )
+        best_acc_dev = 0.0
+        patience = 0 
+        for epoch in range(args.iterations):
+            if patience == args.patience:
+                break
+            split_idx = int(len(train_sent) * 0.8)
+            actual_train_sent = train_sent[:split_idx]
+            actual_train_denom = train_denom[:split_idx]
+            dev_sent = train_sent[split_idx:]
+            dev_denom = train_denom[split_idx:]
+            sent_model.fit(
+                [train_sent, train_denom],
+                [train_label],
+                batch_size=args.batch_size,
+                epochs=1,
+                shuffle=True,
+                verbose=True,
+            )
+            prob_distrib = sent_model.predict([dev_sent, dev_denom], batch_size=1000)
+            acc_dev = get_accuracy(prob_distrib, train_label[split_idx:])
+            if acc_dev > best_acc_dev:
+                best_acc_dev = acc_dev
+                patience = 0
+            else:
+                patience += 1
+            print(f"Epoch {epoch} - Dev Acc: {acc_dev}")
 
         prob_distrib = sent_model.predict([test_sent, test_denom], batch_size=1000)
         best_acc_test = get_accuracy(prob_distrib, test_label)
@@ -276,7 +303,7 @@ def read_data(fname, num_sent=4):
 
 args_parser = argparse.ArgumentParser()
 args_parser.add_argument(
-    "--train_path", default="../../dataset/train/", help="path to train set"
+    "--train_path", default="../../dataset/train", help="path to train set"
 )
 args_parser.add_argument("--train_set", default="gpt4o", help="train set to choose")
 args_parser.add_argument("--test_language", default="su", help="test set language")
@@ -308,11 +335,14 @@ args_parser.add_argument("--seed", type=int, default=1, help="random seed")
 args = args_parser.parse_args()
 
 scores = {}
-for num_sent in [0, 1, 2, 3, 4]:
-
+for num_sent in [4]:
     args.num_sent = num_sent
     set_seed(args.seed)
-    trainset = read_data(f"{args.train_path}/id_jvsu_{args.train_set}.csv", args.num_sent)
+    trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
+    # shuffle the trainset
+    trainset = list(zip(trainset[0], trainset[1]))
+    random.shuffle(trainset)
+    trainset = list(zip(*trainset))
     print("Train set loaded")
     assert args.test_language in ["su", "jv"]
     if args.test_language == "su":
@@ -329,6 +359,8 @@ for num_sent in [0, 1, 2, 3, 4]:
     print("-------------------------------------------")
     scores[num_sent] = test_score
 
-with open(f"result/bilstm_{args.train_set}_scores.txt", 'w') as f:
+output_filename = get_unique_filename(f"result_{args.test_language}/bilstm_{args.train_set}_scores.txt")
+
+with open(output_filename, 'w') as f:
     for k, v in scores.items():
         f.write(f"{k}: {v}\n")
