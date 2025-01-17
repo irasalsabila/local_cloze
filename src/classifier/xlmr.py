@@ -155,7 +155,7 @@ def train(args, train_dataset, test_dataset, model):
     train_data, dev_data = train_test_split(train_dataset, test_size=0.2, random_state=args.seed)
 
     no_decay = ["bias", "LayerNorm.weight"]
-    t_total = len(train_dataset) // args.batch_size * args.num_train_epochs
+    t_total = len(train_data) // args.batch_size * args.num_train_epochs
     args.warmup_steps = int(0.1 * t_total)
     optimizer_grouped_parameters = [
         {
@@ -171,7 +171,7 @@ def train(args, train_dataset, test_dataset, model):
 
     # Train!
     logger.info("***** Running training *****")
-    logger.info("  Num examples = %d", len(train_dataset))
+    logger.info("  Num examples = %d", len(train_data))
     logger.info("  Num Epochs = %d", args.num_train_epochs)
     logger.info("  Total optimization steps = %d", t_total)
     logger.info("  Warming up = %d", args.warmup_steps)
@@ -185,10 +185,10 @@ def train(args, train_dataset, test_dataset, model):
     best_acc_dev = 0
     cur_patience = 0
     for i in range(int(args.num_train_epochs)):
-        random.shuffle(train_dataset)
+        random.shuffle(train_data)
         epoch_loss = 0.0
-        for j in range(0, len(train_dataset), args.batch_size):
-            src, seg, label, mask_src = Batch(train_dataset, j, args.batch_size, args.device).get()
+        for j in range(0, len(train_data), args.batch_size):
+            src, seg, label, mask_src = Batch(train_data, j, args.batch_size, args.device).get()
             model.train()
             loss = model.get_loss(src, seg, label, mask_src)
             loss = loss.sum()/args.batch_size
