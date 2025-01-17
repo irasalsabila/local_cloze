@@ -295,9 +295,14 @@ set_seed(args)
 xlmrdata = XLMRData(args)
 
 scores = {}
-for num_sent in range(args.num_sent, args.num_sent + 1):
+for num_sent in [4]:
     args.num_sent = num_sent
     trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
+    # random.shuffle(trainset)
+    # trainset = list(zip(*trainset))
+
+    trainset = list(zip(*trainset))
+    trainset = list(map(list, trainset))  # Convert tuples to lists
     random.shuffle(trainset)
     trainset = list(zip(*trainset))
 
