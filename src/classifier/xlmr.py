@@ -153,6 +153,10 @@ def read_data(fname, num_sent=4):
 def train(args, train_dataset, test_dataset, model):
 
     train_data, dev_data = train_test_split(train_dataset, test_size=0.2, random_state=args.seed)
+    if len(dev_data) %2 == 1:
+        dev_data = dev_data[:-1]
+    if len(train_data) %2 == 1:
+        train_data = train_data[:-1]
 
     no_decay = ["bias", "LayerNorm.weight"]
     t_total = len(train_data) // args.batch_size * args.num_train_epochs
