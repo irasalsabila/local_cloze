@@ -334,7 +334,7 @@ for num_sent in [4]:
     scores[num_sent] = {'best_acc_test': best_acc_test, 'best_acc_dev': best_acc_dev, 'best_loss': best_loss}
 
 # Generate unique file name if the file already exists
-output_filename = get_unique_filename(f"result2_{args.test_language}/xlmr_{args.train_set}_scores.txt")
+output_filename = get_unique_filename(f"result_{args.test_language}/xlmr_{args.train_set}_scores.txt")
 
 # Write the scores to a text file with the unique name
 with open(output_filename, 'w') as f:
