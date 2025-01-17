@@ -8,6 +8,7 @@ import torch.nn as nn
 from sklearn.metrics import f1_score, accuracy_score
 from transformers import XLMRobertaTokenizer, XLMRobertaModel, XLMRobertaConfig
 from transformers import AdamW, get_linear_schedule_with_warmup
+from sklearn.model_selection import train_test_split
 
 logger = logging.getLogger(__name__)
 
@@ -150,6 +151,9 @@ def read_data(fname, num_sent=4):
     return contexts, endings, labels
 
 def train(args, train_dataset, test_dataset, model):
+
+    train_data, dev_data = train_test_split(train_dataset, test_size=0.2, random_state=args.seed)
+
     no_decay = ["bias", "LayerNorm.weight"]
     t_total = len(train_dataset) // args.batch_size * args.num_train_epochs
     args.warmup_steps = int(0.1 * t_total)
@@ -178,6 +182,7 @@ def train(args, train_dataset, test_dataset, model):
     global_step = 1
     best_loss = float('inf')  # Use loss for early stopping
     best_acc_test = 0
+    best_acc_dev = 0
     cur_patience = 0
     for i in range(int(args.num_train_epochs)):
         random.shuffle(train_dataset)
@@ -202,22 +207,31 @@ def train(args, train_dataset, test_dataset, model):
         avg_epoch_loss = epoch_loss / global_step
         logger.info("Finish epoch = %s, loss_epoch = %s", i + 1, avg_epoch_loss)
 
+        dev_acc, dev_pred = prediction(dev_data, model, args)
+
         # Check for early stopping based on loss
-        if avg_epoch_loss < best_loss:
-            best_loss = avg_epoch_loss
+
+        if dev_acc > best_acc_dev:
+            best_acc_dev = dev_acc
             test_acc, test_pred = prediction(test_dataset, model, args)
             best_acc_test = test_acc
             cur_patience = 0
-            logger.info("Better loss, BEST loss = %s & BEST Acc in test = %s.", best_loss, best_acc_test)
+            logger.info("Better, BEST Acc in DEV = %s & BEST Acc in test = %s.", best_acc_dev, best_acc_test)
+
+            # Check and log information about loss improvement
+            if avg_epoch_loss < best_loss:
+                best_loss = avg_epoch_loss
+                logger.info("Better loss, BEST loss = %s & BEST Acc in test = %s.", best_loss, best_acc_test)
+
         else:
             cur_patience += 1
             if cur_patience == args.patience:
-                logger.info("Early Stopping, BEST loss = %s & BEST Acc in test = %s.", best_loss, best_acc_test)
+                logger.info("Early Stopping, BEST Acc in DEV = %s & BEST Acc in test = %s.", best_acc_dev, best_acc_test)
                 break
             else:
-                logger.info("No improvement, BEST loss = %s & BEST Acc in test = %s.", best_loss, best_acc_test)
+                logger.info("Not Better, BEST Acc in DEV = %s & BEST Acc in test = %s.", best_acc_dev, best_acc_test)
 
-    return global_step, tr_loss / global_step, best_loss, best_acc_test, test_pred
+    return global_step, tr_loss / global_step, best_loss, best_acc_test, test_pred, dev_pred, best_acc_dev
 
 # Function to get a unique file name
 def get_unique_filename(base_filename):
@@ -284,6 +298,9 @@ scores = {}
 for num_sent in range(args.num_sent, args.num_sent + 1):
     args.num_sent = num_sent
     trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
+    random.shuffle(trainset)
+    trainset = list(zip(*trainset))
+
     print("Train set loaded")
 
     assert(args.test_language in ['su', 'jv'])
@@ -301,14 +318,15 @@ for num_sent in range(args.num_sent, args.num_sent + 1):
     model = Model(args, args.device)
     model.to(args.device)
 
-    global_step, tr_loss, best_loss, best_acc_test, test_pred = train(args, train_dataset, test_dataset, model)
+    global_step, tr_loss, best_loss, best_acc_test, test_pred, dev_pred, best_acc_dev = train(args, train_dataset, test_dataset, model)
     print(f'Num Sentences: {num_sent}')
     print(f'Best loss: {best_loss}')
     print(f'Test set accuracy: {best_acc_test}')
+    print(f'Dev set accuracy', {best_acc_dev})
     print('-------------------------------------------')
 
     # Save best accuracy and loss in the scores dictionary
-    scores[num_sent] = {'best_acc_test': best_acc_test, 'best_loss': best_loss}
+    scores[num_sent] = {'best_acc_test': best_acc_test, 'best_acc_dev': best_acc_dev, 'best_loss': best_loss}
 
 # Generate unique file name if the file already exists
 output_filename = get_unique_filename(f"result2_{args.test_language}/xlmr_{args.train_set}_scores.txt")
@@ -316,4 +334,4 @@ output_filename = get_unique_filename(f"result2_{args.test_language}/xlmr_{args.
 # Write the scores to a text file with the unique name
 with open(output_filename, 'w') as f:
     for num_sent, score in scores.items():
-        f.write(f"Num Sentences: {num_sent}, Best Accuracy: {score['best_acc_test']}, Best Loss: {score['best_loss']}\n")
+        f.write(f"Num Sentences: {num_sent}, Best Test Accuracy: {score['best_acc_test']}, Best Dev Accuracy: {score['best_acc_dev']}, Best Loss: {score['best_loss']}\n")
