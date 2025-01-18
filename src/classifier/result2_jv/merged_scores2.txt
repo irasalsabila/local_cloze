@@ -1,3 +1,30 @@
+4: 0.6345966958211856
+4: 0.6316812439261419
+4: 0.6054421768707483
+4: 0.5928085519922255
+4: 0.5724003887269193
+4: 0.576287657920311
+4: 0.5170068027210885
+4: 0.49854227405247814
+4: 0.5131195335276968
+4: 0.6239067055393586
+4: 0.6025267249757046
+4: 0.5918367346938775
+4: 0.6141885325558795
+4: 0.6209912536443148
+4: 0.60932944606414
+4: 0.6491739552964043
+4: 0.6676384839650146
+4: 0.6763848396501457
+4: 0.6812439261418853
+4: 0.6695821185617103
+4: 0.6919339164237124
+4: 0.5898931000971818
+4: 0.5908649173955296
+4: 0.5996112730806609
+4: 0.5636540330417882
+4: 0.5364431486880467
+4: 0.5704567541302236
 ===== bilstm_id_jvsu_claude_scores.txt =====
 4: 0.6345966958211856
 ===== bilstm_id_jvsu_claude_scores_1.txt =====
@@ -110,30 +137,30 @@ Num Sentences: 4, Best Test Accuracy: 0.6715257531584062, Best Dev Accuracy: 0.6
 ===== bilstm_id_jvsu_mt_scores_1.txt =====
 ===== bilstm_id_jvsu_mt_scores_2.txt =====
 ===== merged_scores.txt =====
-===== xlmr_id_jvsu_claude_scores.txt =====
-===== xlmr_id_jvsu_claude_scores_1.txt =====
-===== xlmr_id_jvsu_claude_scores_2.txt =====
-===== xlmr_id_jvsu_cohere_scores.txt =====
-===== xlmr_id_jvsu_cohere_scores_1.txt =====
-===== xlmr_id_jvsu_cohere_scores_2.txt =====
-===== xlmr_id_jvsu_gemma2_scores.txt =====
-===== xlmr_id_jvsu_gemma2_scores_1.txt =====
-===== xlmr_id_jvsu_gemma2_scores_2.txt =====
-===== xlmr_id_jvsu_gpt4o_scores.txt =====
-===== xlmr_id_jvsu_gpt4o_scores_1.txt =====
-===== xlmr_id_jvsu_gpt4o_scores_2.txt =====
-===== xlmr_id_jvsu_llama_scores.txt =====
-===== xlmr_id_jvsu_llama_scores_1.txt =====
-===== xlmr_id_jvsu_llama_scores_2.txt =====
-===== xlmr_id_jvsu_llm_filtered_scores.txt =====
-===== xlmr_id_jvsu_llm_filtered_scores_1.txt =====
-===== xlmr_id_jvsu_llm_filtered_scores_2.txt =====
-===== xlmr_id_jvsu_llm_scores.txt =====
-===== xlmr_id_jvsu_llm_scores_1.txt =====
-===== xlmr_id_jvsu_llm_scores_2.txt =====
-===== xlmr_id_jvsu_mixtral_scores.txt =====
-===== xlmr_id_jvsu_mixtral_scores_1.txt =====
-===== xlmr_id_jvsu_mixtral_scores_2.txt =====
-===== xlmr_id_jvsu_mt_scores.txt =====
-===== xlmr_id_jvsu_mt_scores_1.txt =====
-===== xlmr_id_jvsu_mt_scores_2.txt =====
+Num Sentences: 4, Best Test Accuracy: 0.7551020408163265, Best Dev Accuracy: 0.7, Best Loss: 0.07181765161837024
+Num Sentences: 4, Best Test Accuracy: 0.7541302235179786, Best Dev Accuracy: 0.69, Best Loss: 0.09348996635681381
+Num Sentences: 4, Best Test Accuracy: 0.7395529640427599, Best Dev Accuracy: 0.6916666666666667, Best Loss: 0.07156446292975739
+Num Sentences: 4, Best Test Accuracy: 0.750242954324587, Best Dev Accuracy: 0.6516666666666666, Best Loss: 0.06035522541770441
+Num Sentences: 4, Best Test Accuracy: 0.738581146744412, Best Dev Accuracy: 0.65, Best Loss: 0.09516688953986942
+Num Sentences: 4, Best Test Accuracy: 0.7531584062196307, Best Dev Accuracy: 0.67, Best Loss: 0.05726279716707842
+Num Sentences: 4, Best Test Accuracy: 0.7288629737609329, Best Dev Accuracy: 0.61, Best Loss: 0.0489251226509342
+Num Sentences: 4, Best Test Accuracy: 0.6025267249757046, Best Dev Accuracy: 0.5216666666666666, Best Loss: 0.345700707425715
+Num Sentences: 4, Best Test Accuracy: 0.7414965986394558, Best Dev Accuracy: 0.605, Best Loss: 0.04250077407944128
+Num Sentences: 4, Best Test Accuracy: 0.7842565597667639, Best Dev Accuracy: 0.7166666666666667, Best Loss: 0.06303634071895715
+Num Sentences: 4, Best Test Accuracy: 0.7745383867832848, Best Dev Accuracy: 0.7233333333333334, Best Loss: 0.025196302009065582
+Num Sentences: 4, Best Test Accuracy: 0.7764820213799806, Best Dev Accuracy: 0.7283333333333334, Best Loss: 0.03799932036048788
+Num Sentences: 4, Best Test Accuracy: 0.7755102040816326, Best Dev Accuracy: 0.6866666666666666, Best Loss: 0.063952026518525
+Num Sentences: 4, Best Test Accuracy: 0.7560738581146744, Best Dev Accuracy: 0.685, Best Loss: 0.040195760918854836
+Num Sentences: 4, Best Test Accuracy: 0.783284742468416, Best Dev Accuracy: 0.695, Best Loss: 0.015583728759064504
+Num Sentences: 4, Best Test Accuracy: 0.7580174927113703, Best Dev Accuracy: 0.7059819413092551, Best Loss: 0.015017819077589999
+Num Sentences: 4, Best Test Accuracy: 0.7657920310981535, Best Dev Accuracy: 0.7020316027088036, Best Loss: 0.08060506263093369
+Num Sentences: 4, Best Test Accuracy: 0.7473275024295433, Best Dev Accuracy: 0.7093679458239278, Best Loss: 0.014865008142875245
+Num Sentences: 4, Best Test Accuracy: 0.7278911564625851, Best Dev Accuracy: 0.7053846153846154, Best Loss: 0.011785943818092755
+Num Sentences: 4, Best Test Accuracy: 0.7551020408163265, Best Dev Accuracy: 0.7011538461538461, Best Loss: 0.058505258465932374
+Num Sentences: 4, Best Test Accuracy: 0.7453838678328474, Best Dev Accuracy: 0.7003846153846154, Best Loss: 0.057729478664063597
+Num Sentences: 4, Best Test Accuracy: 0.7201166180758017, Best Dev Accuracy: 0.7216666666666667, Best Loss: 0.03633693633571996
+Num Sentences: 4, Best Test Accuracy: 0.6909620991253644, Best Dev Accuracy: 0.7233333333333334, Best Loss: 0.05769938736864664
+Num Sentences: 4, Best Test Accuracy: 0.7123420796890184, Best Dev Accuracy: 0.7133333333333334, Best Loss: 0.05529847745260485
+Num Sentences: 4, Best Test Accuracy: 0.6647230320699709, Best Dev Accuracy: 0.62, Best Loss: 0.02726985600357638
+Num Sentences: 4, Best Test Accuracy: 0.6637512147716229, Best Dev Accuracy: 0.62, Best Loss: 0.05689721646952093
+Num Sentences: 4, Best Test Accuracy: 0.6715257531584062, Best Dev Accuracy: 0.62, Best Loss: 0.0738764660787632
