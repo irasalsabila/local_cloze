@@ -124,6 +124,8 @@ def prediction(dataset, model, args):
         answer, prediction = model.predict(src, seg, mask_src, label)
         golds += answer
         preds += prediction
+
+        print(preds)
     return accuracy_score(golds, preds), preds
 
 def read_data(fname, num_sent=4):
@@ -218,6 +220,7 @@ def train(args, train_dataset, test_dataset, model):
         if dev_acc > best_acc_dev:
             best_acc_dev = dev_acc
             test_acc, test_pred = prediction(test_dataset, model, args)
+            print(test_pred)
             best_acc_test = test_acc
             cur_patience = 0
             logger.info("Better, BEST Acc in DEV = %s & BEST Acc in test = %s.", best_acc_dev, best_acc_test)
@@ -302,8 +305,6 @@ scores = {}
 for num_sent in [4]:
     args.num_sent = num_sent
     trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
-    # random.shuffle(trainset)
-    # trainset = list(zip(*trainset))
 
     trainset = list(zip(*trainset))
     trainset = list(map(list, trainset))  # Convert tuples to lists
@@ -312,13 +313,23 @@ for num_sent in [4]:
 
     print("Train set loaded")
 
-    assert(args.test_language in ['su', 'jv'])
-    if args.test_language == 'jv':
-        testset = read_data('../../dataset/test/test_jv.csv', args.num_sent)
-    else:
-        testset = read_data('../../dataset/test/test_su.csv', args.num_sent)
-    print("Test set loaded")
+    assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
 
+    if args.test_language.startswith('jv'):
+        testset = read_data('../../dataset/test/test_jv.csv', args.num_sent)
+        if args.test_language == 'jv_mt':
+            testset = testset[testset[['topic', 'category']].isnull().all(axis=1)]
+        elif args.test_language == 'jv_syn':
+            testset = testset[testset[['topic', 'category']].notnull().all(axis=1)]
+    elif args.test_language.startswith('su'):
+        testset = read_data('../../dataset/test/test_su.csv', args.num_sent)
+        if args.test_language == 'su_mt':
+            testset = testset[testset[['topic', 'category']].isnull().all(axis=1)]
+        elif args.test_language == 'su_syn':
+            testset = testset[testset[['topic', 'category']].notnull().all(axis=1)]
+
+    print("Test set loaded")
+    print(testset.columns())
 
     train_dataset = xlmrdata.preprocess(trainset[0], trainset[1], trainset[2])
     test_dataset = xlmrdata.preprocess(testset[0], testset[1], testset[2])
@@ -328,6 +339,10 @@ for num_sent in [4]:
     model.to(args.device)
 
     global_step, tr_loss, best_loss, best_acc_test, test_pred, dev_pred, best_acc_dev = train(args, train_dataset, test_dataset, model)
+
+    testset['prediction'] = test_pred
+    testset.to_csv(f"../../dataset/test/test_{args.test_language}_with_predictions.csv", index=False)
+
     print(f'Num Sentences: {num_sent}')
     print(f'Best loss: {best_loss}')
     print(f'Test set accuracy: {best_acc_test}')
