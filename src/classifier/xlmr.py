@@ -124,8 +124,6 @@ def prediction(dataset, model, args):
         answer, prediction = model.predict(src, seg, mask_src, label)
         golds += answer
         preds += prediction
-
-       # print(preds)
     return accuracy_score(golds, preds), preds
 
 def read_data(fname, num_sent=4):
@@ -302,7 +300,7 @@ set_seed(args)
 xlmrdata = XLMRData(args)
 
 scores = {}
-test_predictions = []
+# test_predictions = []
 for num_sent in [4]:
     args.num_sent = num_sent
     trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
@@ -313,6 +311,7 @@ for num_sent in [4]:
     trainset = list(zip(*trainset))
 
     print("Train set loaded")
+    logger.info(f"Training dataset loaded for num_sent = {num_sent}")
 
     assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
 
@@ -334,7 +333,7 @@ for num_sent in [4]:
     testset = read_data(test_path, args.num_sent)
 
     print("Test set loaded")
-    # print(testset.columns())
+    logger.info(f"Test dataset loaded")
 
     train_dataset = xlmrdata.preprocess(trainset[0], trainset[1], trainset[2])
     test_dataset = xlmrdata.preprocess(testset[0], testset[1], testset[2])
@@ -345,7 +344,7 @@ for num_sent in [4]:
 
     global_step, tr_loss, best_loss, best_acc_test, test_pred, dev_pred, best_acc_dev = train(args, train_dataset, test_dataset, model)
 
-    test_predictions.extend(list(test_pred))
+    # test_predictions.extend(list(test_pred))
 
     print(f'Num Sentences: {num_sent}')
     print(f'Best loss: {best_loss}')
@@ -356,14 +355,28 @@ for num_sent in [4]:
     # Save best accuracy and loss in the scores dictionary
     scores[num_sent] = {'best_acc_test': best_acc_test, 'best_acc_dev': best_acc_dev, 'best_loss': best_loss}
 
-if len(original_test_df) == len(test_pred):
-    original_test_df['predictions'] = test_pred
-else:
-    raise ValueError("Mismatch between test dataset rows and predictions.")
-testset.to_csv(f"result2_{args.test_language}/test_{args.test_language}_with_preds.csv", index=False)
+    # Add predictions to the original test dataset
+    reconstructed_df = pd.DataFrame({
+        "sentence_1": original_test_df["sentence_1"],
+        "sentence_2": original_test_df["sentence_2"],
+        "sentence_3": original_test_df["sentence_3"],
+        "sentence_4": original_test_df["sentence_4"],
+        "correct_ending": original_test_df["correct_ending"],
+        "incorrect_ending": original_test_df["incorrect_ending"],
+        "topic": original_test_df.get("topic", None),
+        "category": original_test_df.get("category", None),
+    })
 
-output_path = get_unique_filename(f"result2_{args.test_language}/xlmr_test_{args.test_language}_{args.train_set}_with_preds.csv")
-original_test_df.to_csv(output_path, index=False)
+    # Ensure the length matches
+    if len(reconstructed_df) == len(test_pred):
+        reconstructed_df["predictions"] = test_pred
+    else:
+        raise ValueError("Mismatch between test dataset rows and predictions.")
+
+    # Save the reconstructed DataFrame to a CSV file
+    output_path = get_unique_filename(f"result2_{args.test_language}/test_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv")
+    reconstructed_df.to_csv(output_path, index=False)
+    logger.info(f"Predictions saved to {output_path}")
 
 # Generate unique file name if the file already exists
 output_filename = get_unique_filename(f"result2_{args.test_language}/xlmr_{args.train_set}_scores.txt")
