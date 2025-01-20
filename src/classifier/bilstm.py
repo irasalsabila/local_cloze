@@ -354,20 +354,56 @@ for num_sent in [4]:
     random.shuffle(trainset)
     trainset = list(zip(*trainset))
     print("Train set loaded")
-    assert args.test_language in ["su", "jv"]
-    if args.test_language == "su":
-        testset = read_data("../../dataset/test/test_su.csv", args.num_sent)
+
+    # assert args.test_language in ["su", "jv"]
+    # if args.test_language == "su":
+    #     testset = read_data("../../dataset/test/test_su.csv", args.num_sent)
+    # else:
+    #     testset = read_data("../../dataset/test/test_jv.csv", args.num_sent)
+
+    assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
+
+    if args.test_language.startswith('jv'):
+        test_path = '../../dataset/test/test_jv.csv'
+    elif args.test_language.startswith('su'):
+        test_path = '../../dataset/test/test_su.csv'
     else:
-        testset = read_data("../../dataset/test/test_jv.csv", args.num_sent)
-    print("test set loaded")
+        raise ValueError("Unsupported test language")
+
+    original_test_df = pd.read_csv(test_path)
+
+    if args.test_language.endswith('_mt'):
+        original_test_df = original_test_df[original_test_df[['topic', 'category']].isnull().all(axis=1)]
+    elif args.test_language.endswith('_syn'):
+        original_test_df = original_test_df[original_test_df[['topic', 'category']].notnull().all(axis=1)]
+
+    # Process the test data
+    testset = read_data(test_path, args.num_sent)
+    print("Test set loaded")
+    
     train_dataset = preprocess(args, trainset[0], trainset[1])
     test_dataset = preprocess(args, testset[0], testset[1])
-    print("data preprocessed")
+    print("Data preprocessed")
+    
     test_score = train_and_test_fasttext(train_dataset, test_dataset, args)
     print("Num Sent:", num_sent)
     print("Test set accuracy", test_score)
     print("-------------------------------------------")
     scores[num_sent] = test_score
+
+    predictions = (np.array(test_score) > 0.5).astype(int)  # Convert probabilities to binary predictions
+
+    if len(original_test_df) == len(predictions):
+        original_test_df["predictions"] = predictions
+    else:
+        raise ValueError("Mismatch between test dataset rows and predictions.")
+
+    # Save the reconstructed DataFrame
+    output_path = get_unique_filename(
+        f"result2_{args.test_language}/test_bilstm_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv"
+    )
+    original_test_df.to_csv(output_path, index=False)
+    print(f"Predictions saved to {output_path}")
 
 output_filename = get_unique_filename(f"result_{args.test_language}/bilstm_{args.train_set}_scores.txt")
 
