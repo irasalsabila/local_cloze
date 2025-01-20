@@ -240,12 +240,12 @@ def train(args, train_dataset, test_dataset, model):
 
     return global_step, tr_loss / global_step, best_loss, best_acc_test, test_pred, dev_pred, best_acc_dev
 
-# Function to get a unique file name
 def get_unique_filename(base_filename):
     counter = 1
     filename = base_filename
+    base, ext = os.path.splitext(base_filename)  # Split filename and extension
     while os.path.exists(filename):
-        filename = f"{base_filename.rsplit('.', 1)[0]}_{counter}.txt"
+        filename = f"{base}_{counter}{ext}"  # Append counter before the extension
         counter += 1
     return filename
 
@@ -317,17 +317,21 @@ for num_sent in [4]:
     assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
 
     if args.test_language.startswith('jv'):
-        testset = read_data('../../dataset/test/test_jv.csv', args.num_sent)
-        if args.test_language == 'jv_mt':
-            testset = testset[testset[['topic', 'category']].isnull().all(axis=1)]
-        elif args.test_language == 'jv_syn':
-            testset = testset[testset[['topic', 'category']].notnull().all(axis=1)]
+        test_path = '../../dataset/test/test_jv.csv'
     elif args.test_language.startswith('su'):
-        testset = read_data('../../dataset/test/test_su.csv', args.num_sent)
-        if args.test_language == 'su_mt':
-            testset = testset[testset[['topic', 'category']].isnull().all(axis=1)]
-        elif args.test_language == 'su_syn':
-            testset = testset[testset[['topic', 'category']].notnull().all(axis=1)]
+        test_path = '../../dataset/test/test_su.csv'
+    else:
+        raise ValueError("Unsupported test language")
+
+    original_test_df = pd.read_csv(test_path)
+
+    if args.test_language.endswith('_mt'):
+        original_test_df = original_test_df[original_test_df[['topic', 'category']].isnull().all(axis=1)]
+    elif args.test_language.endswith('_syn'):
+        original_test_df = original_test_df[original_test_df[['topic', 'category']].notnull().all(axis=1)]
+
+    # Process the test data
+    testset = read_data(test_path, args.num_sent)
 
     print("Test set loaded")
     # print(testset.columns())
@@ -352,8 +356,14 @@ for num_sent in [4]:
     # Save best accuracy and loss in the scores dictionary
     scores[num_sent] = {'best_acc_test': best_acc_test, 'best_acc_dev': best_acc_dev, 'best_loss': best_loss}
 
-testset['predicton'] = list(test_predictions)
+if len(original_test_df) == len(test_pred):
+    original_test_df['predictions'] = test_pred
+else:
+    raise ValueError("Mismatch between test dataset rows and predictions.")
 testset.to_csv(f"result2_{args.test_language}/test_{args.test_language}_with_preds.csv", index=False)
+
+output_path = get_unique_filename(f"result2_{args.test_language}/xlmr_test_{args.test_language}_{args.train_set}_with_preds.csv")
+original_test_df.to_csv(output_path, index=False)
 
 # Generate unique file name if the file already exists
 output_filename = get_unique_filename(f"result2_{args.test_language}/xlmr_{args.train_set}_scores.txt")
