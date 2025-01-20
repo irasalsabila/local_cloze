@@ -125,7 +125,7 @@ def prediction(dataset, model, args):
         golds += answer
         preds += prediction
 
-        print(preds)
+       # print(preds)
     return accuracy_score(golds, preds), preds
 
 def read_data(fname, num_sent=4):
@@ -220,7 +220,7 @@ def train(args, train_dataset, test_dataset, model):
         if dev_acc > best_acc_dev:
             best_acc_dev = dev_acc
             test_acc, test_pred = prediction(test_dataset, model, args)
-            print(test_pred)
+            # print(test_pred)
             best_acc_test = test_acc
             cur_patience = 0
             logger.info("Better, BEST Acc in DEV = %s & BEST Acc in test = %s.", best_acc_dev, best_acc_test)
@@ -302,6 +302,7 @@ set_seed(args)
 xlmrdata = XLMRData(args)
 
 scores = {}
+test_predictions = []
 for num_sent in [4]:
     args.num_sent = num_sent
     trainset = read_data(f"{args.train_path}/{args.train_set}.csv", args.num_sent)
@@ -329,7 +330,7 @@ for num_sent in [4]:
             testset = testset[testset[['topic', 'category']].notnull().all(axis=1)]
 
     print("Test set loaded")
-    print(testset.columns())
+    # print(testset.columns())
 
     train_dataset = xlmrdata.preprocess(trainset[0], trainset[1], trainset[2])
     test_dataset = xlmrdata.preprocess(testset[0], testset[1], testset[2])
@@ -340,8 +341,7 @@ for num_sent in [4]:
 
     global_step, tr_loss, best_loss, best_acc_test, test_pred, dev_pred, best_acc_dev = train(args, train_dataset, test_dataset, model)
 
-    testset['prediction'] = test_pred
-    testset.to_csv(f"../../dataset/test/test_{args.test_language}_with_predictions.csv", index=False)
+    test_predictions.extend(list(test_pred))
 
     print(f'Num Sentences: {num_sent}')
     print(f'Best loss: {best_loss}')
@@ -352,8 +352,11 @@ for num_sent in [4]:
     # Save best accuracy and loss in the scores dictionary
     scores[num_sent] = {'best_acc_test': best_acc_test, 'best_acc_dev': best_acc_dev, 'best_loss': best_loss}
 
+testset['predicton'] = list(test_predictions)
+testset.to_csv(f"result2_{args.test_language}/test_{args.test_language}_with_preds.csv", index=False)
+
 # Generate unique file name if the file already exists
-output_filename = get_unique_filename(f"result_{args.test_language}/xlmr_{args.train_set}_scores.txt")
+output_filename = get_unique_filename(f"result2_{args.test_language}/xlmr_{args.train_set}_scores.txt")
 
 # Write the scores to a text file with the unique name
 with open(output_filename, 'w') as f:
