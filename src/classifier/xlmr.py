@@ -126,29 +126,68 @@ def prediction(dataset, model, args):
         preds += prediction
     return accuracy_score(golds, preds), preds
 
-def read_data(fname, num_sent=4):
+# def read_data(fname, num_sent=4):
+#     contexts = []
+#     endings = []
+#     labels = []
+#     data = pd.read_csv(fname)
+#     for idx, row in data.iterrows():
+#         sents = []
+#         for i in [4,3,2,1]:
+#             if len(sents) == num_sent:
+#                 break
+#             sents.insert(0, row[f'sentence_{i}'])
+#         context = ' '.join(sents) 
+#         ending1 = row['correct_ending']
+#         ending2 = row['incorrect_ending']
+        
+#         contexts.append(context)
+#         endings.append(ending1)
+#         labels.append(1)
+        
+#         contexts.append(context)
+#         endings.append(ending2)
+#         labels.append(0)
+#     return contexts, endings, labels
+
+def read_data(fname, num_sent=4, test_language=None):
     contexts = []
     endings = []
     labels = []
+
+    # Read the data
     data = pd.read_csv(fname)
+
+    # Apply filtering based on test_language
+    if test_language and test_language.endswith("_mt"):
+        data = data[data[["topic", "category"]].isnull().all(axis=1)]
+    elif test_language and test_language.endswith("_syn"):
+        data = data[data[["topic", "category"]].notnull().all(axis=1)]
+
+    # Process each row
     for idx, row in data.iterrows():
         sents = []
-        for i in [4,3,2,1]:
+        for i in range(num_sent, 0, -1):
             if len(sents) == num_sent:
                 break
-            sents.insert(0, row[f'sentence_{i}'])
-        context = ' '.join(sents) 
-        ending1 = row['correct_ending']
-        ending2 = row['incorrect_ending']
+            sents.insert(0, row.get(f"sentence_{i}", ""))  # Safely get sentences
         
+        # Combine sentences into a single context
+        context = " ".join(sents)
+        ending1 = row["correct_ending"]
+        ending2 = row["incorrect_ending"]
+
+        # Add correct and incorrect endings
         contexts.append(context)
         endings.append(ending1)
         labels.append(1)
-        
+
         contexts.append(context)
         endings.append(ending2)
         labels.append(0)
+
     return contexts, endings, labels
+
 
 def train(args, train_dataset, test_dataset, model):
 
@@ -315,9 +354,9 @@ for num_sent in [4]:
 
     assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
 
-    if args.test_language.startswith('jv'):
+    if args.test_language in ['jv', 'jv_mt', 'jv_syn']:
         test_path = '../../dataset/test/test_jv.csv'
-    elif args.test_language.startswith('su'):
+    elif args.test_language in ['su', 'su_mt', 'su_syn']:
         test_path = '../../dataset/test/test_su.csv'
     else:
         raise ValueError("Unsupported test language")
@@ -330,9 +369,9 @@ for num_sent in [4]:
         original_test_df = original_test_df[original_test_df[['topic', 'category']].notnull().all(axis=1)]
 
     # Process the test data
-    testset = read_data(test_path, args.num_sent)
+    testset = read_data(test_path, args.num_sent, args.test_language)
 
-    print("Test set loaded")
+    print("Test set loaded")ß
     logger.info(f"Test dataset loaded")
 
     train_dataset = xlmrdata.preprocess(trainset[0], trainset[1], trainset[2])
@@ -366,6 +405,9 @@ for num_sent in [4]:
         "topic": original_test_df.get("topic", None),
         "category": original_test_df.get("category", None),
     })
+
+    print("reconstructed_df:",len(reconstructed_df))
+    print("test_pred:",len(test_pred))
 
     # Ensure the length matches
     if len(reconstructed_df) == len(test_pred):
