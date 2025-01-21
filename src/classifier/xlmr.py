@@ -371,7 +371,7 @@ for num_sent in [4]:
     # Process the test data
     testset = read_data(test_path, args.num_sent, args.test_language)
 
-    print("Test set loaded")ß
+    print("Test set loaded")
     logger.info(f"Test dataset loaded")
 
     train_dataset = xlmrdata.preprocess(trainset[0], trainset[1], trainset[2])
