@@ -397,11 +397,14 @@ for num_sent in [4]:
 
     print("Test language:", args.test_language)
 
-    # assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
-
     print(f"Debug: args.test_language = '{args.test_language}' (repr: {repr(args.test_language)})")
-    args.test_language = args.test_language.strip()
 
+    # Strip and remove invalid characters
+    args.test_language = args.test_language.strip()
+    args.test_language = re.sub(r'[^\w_]', '', args.test_language)
+    print(f"Cleaned test_language: '{args.test_language}'")
+
+    # Assertion after sanitization
     assert args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'], (
         f"Invalid test_language: {args.test_language}"
     )
