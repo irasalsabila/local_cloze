@@ -217,12 +217,13 @@ def model_with_fasttext(
             print(f"Epoch {epoch} - Dev Acc: {acc_dev}")
 
         prob_distrib = sent_model.predict([test_sent, test_denom], batch_size=1000)
+        predictions = (prob_distrib > 0.5).astype(int)  # Binary predictions
         best_acc_test = get_accuracy(prob_distrib, test_label)
     print("Test Acc:", best_acc_test)
     print(
         "-----------------------------------------------------------------------------------"
     )
-    return best_acc_test
+    return best_acc_test, predictions
 
 
 def tokenize(tokenizer, data):
@@ -394,6 +395,8 @@ for num_sent in [4]:
     # else:
     #     testset = read_data("../../dataset/test/test_jv.csv", args.num_sent)
 
+    print("Test language:", args.test_language)
+
     assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
 
     if args.test_language in ['jv', 'jv_mt', 'jv_syn']:
@@ -418,18 +421,13 @@ for num_sent in [4]:
     test_dataset = preprocess(args, testset[0], testset[1])
     print("Data preprocessed")
     
-    test_score = train_and_test_fasttext(train_dataset, test_dataset, args)
+    test_score, predictions = train_and_test_fasttext(train_dataset, test_dataset, args)
     print("Num Sent:", num_sent)
     print("Test set accuracy", test_score)
     print("-------------------------------------------")
     scores[num_sent] = test_score
 
-    predictions = (np.array(test_score) > 0.5).astype(int)  # Convert probabilities to binary predictions
-
-    # if len(original_test_df) == len(predictions):
-    #     original_test_df["predictions"] = predictions
-    # else:
-    #     raise ValueError("Mismatch between test dataset rows and predictions.")
+    # predictions = (np.array(test_score) > 0.5).astype(int)  # Convert probabilities to binary predictions
 
     reconstructed_df = pd.DataFrame({
         "sentence_1": original_test_df["sentence_1"],
