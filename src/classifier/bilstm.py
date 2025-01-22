@@ -440,8 +440,14 @@ for num_sent in [4]:
         "category": original_test_df.get("category", None),
     })
 
-    print("reconstructed_df:",len(reconstructed_df))
-    print("test_pred:",len(predictions))
+    print("Reconstructed_df:",len(reconstructed_df))
+    print("Generated predictions:", len(predictions))
+    print("Predictions shape:", predictions.shape)
+
+    print("Test dataset shape (sents):", len(test_dataset[0]))
+    print("Test dataset shape (labels):", len(test_dataset[1]))
+    print("Predictions length:", len(predictions))
+
 
     if len(predictions) == 2 * len(reconstructed_df):
         grouped_predictions = [
