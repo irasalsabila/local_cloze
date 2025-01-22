@@ -443,12 +443,16 @@ for num_sent in [4]:
     print("reconstructed_df:",len(reconstructed_df))
     print("test_pred:",len(predictions))
 
-    # Ensure the length matches
-    if len(reconstructed_df) == len(predictions):
-        reconstructed_df["predictions"] = predictions
+    if len(predictions) == 2 * len(reconstructed_df):
+        grouped_predictions = [
+            (predictions[i], predictions[i + 1])
+            for i in range(0, len(predictions), 2)
+        ]
+        reconstructed_df["predictions"] = [pair[0] for pair in grouped_predictions]
+        print("Predictions successfully mapped to DataFrame.")
     else:
         raise ValueError("Mismatch between test dataset rows and predictions.")
-
+    
     # Save the reconstructed DataFrame
     output_path = get_unique_filename(
         f"result2_{args.test_language}/test_bilstm_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv"
