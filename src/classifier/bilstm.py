@@ -439,7 +439,7 @@ for num_sent in [4]:
         "topic": original_test_df.get("topic", None),
         "category": original_test_df.get("category", None),
     })
-
+ 
     print("Reconstructed_df:",len(reconstructed_df))
     print("Generated predictions:", len(predictions))
     print("Predictions shape:", predictions.shape)
