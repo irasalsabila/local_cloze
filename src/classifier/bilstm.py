@@ -397,7 +397,14 @@ for num_sent in [4]:
 
     print("Test language:", args.test_language)
 
-    assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
+    # assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
+
+    print(f"Debug: args.test_language = '{args.test_language}' (repr: {repr(args.test_language)})")
+    args.test_language = args.test_language.strip()
+
+    assert args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'], (
+        f"Invalid test_language: {args.test_language}"
+    )
 
     if args.test_language in ['jv', 'jv_mt', 'jv_syn']:
         test_path = '../../dataset/test/test_jv.csv'
