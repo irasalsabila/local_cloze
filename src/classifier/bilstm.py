@@ -284,10 +284,43 @@ def train_and_test_fasttext(trainset, testset, args):
     )
 
 
-def read_data(fname, num_sent=4):
+# def read_data(fname, num_sent=4):
+#     contexts = []
+#     labels = []
+#     data = pd.read_csv(fname)
+#     for idx, row in data.iterrows():
+#         sents = []
+#         for i in [4, 3, 2, 1]:
+#             if len(sents) == num_sent:
+#                 break
+#             sents.insert(0, row[f"sentence_{i}"])
+#         ending1 = row["correct_ending"]
+#         ending2 = row["incorrect_ending"]
+
+#         if num_sent == 0:
+#             contexts.append([ending1])
+#         else:
+#             contexts.append(sents + [ending1])
+#         labels.append(1)
+        
+#         if num_sent == 0:
+#             contexts.append([ending2])
+#         else:
+#             contexts.append(sents + [ending2])
+#         labels.append(0)
+#     return contexts, labels
+
+def read_data(fname, num_sent=4, test_language=None):
     contexts = []
     labels = []
     data = pd.read_csv(fname)
+
+    # Apply filtering based on test_language
+    if test_language and test_language.endswith("_mt"):
+        data = data[data[["topic", "category"]].isnull().all(axis=1)]
+    elif test_language and test_language.endswith("_syn"):
+        data = data[data[["topic", "category"]].notnull().all(axis=1)]
+
     for idx, row in data.iterrows():
         sents = []
         for i in [4, 3, 2, 1]:
@@ -363,9 +396,9 @@ for num_sent in [4]:
 
     assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
 
-    if args.test_language.startswith('jv'):
+    if args.test_language in ['jv', 'jv_mt', 'jv_syn']:
         test_path = '../../dataset/test/test_jv.csv'
-    elif args.test_language.startswith('su'):
+    elif args.test_language in ['su', 'su_mt', 'su_syn']:
         test_path = '../../dataset/test/test_su.csv'
     else:
         raise ValueError("Unsupported test language")
@@ -378,7 +411,7 @@ for num_sent in [4]:
         original_test_df = original_test_df[original_test_df[['topic', 'category']].notnull().all(axis=1)]
 
     # Process the test data
-    testset = read_data(test_path, args.num_sent)
+    testset = read_data(test_path, args.num_sent, args.test_language)
     print("Test set loaded")
     
     train_dataset = preprocess(args, trainset[0], trainset[1])
@@ -393,8 +426,28 @@ for num_sent in [4]:
 
     predictions = (np.array(test_score) > 0.5).astype(int)  # Convert probabilities to binary predictions
 
-    if len(original_test_df) == len(predictions):
-        original_test_df["predictions"] = predictions
+    # if len(original_test_df) == len(predictions):
+    #     original_test_df["predictions"] = predictions
+    # else:
+    #     raise ValueError("Mismatch between test dataset rows and predictions.")
+
+    reconstructed_df = pd.DataFrame({
+        "sentence_1": original_test_df["sentence_1"],
+        "sentence_2": original_test_df["sentence_2"],
+        "sentence_3": original_test_df["sentence_3"],
+        "sentence_4": original_test_df["sentence_4"],
+        "correct_ending": original_test_df["correct_ending"],
+        "incorrect_ending": original_test_df["incorrect_ending"],
+        "topic": original_test_df.get("topic", None),
+        "category": original_test_df.get("category", None),
+    })
+
+    print("reconstructed_df:",len(reconstructed_df))
+    print("test_pred:",len(predictions))
+
+    # Ensure the length matches
+    if len(reconstructed_df) == len(predictions):
+        reconstructed_df["predictions"] = predictions
     else:
         raise ValueError("Mismatch between test dataset rows and predictions.")
 
