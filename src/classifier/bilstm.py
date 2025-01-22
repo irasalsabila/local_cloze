@@ -448,6 +448,8 @@ for num_sent in [4]:
         "incorrect_ending": original_test_df["incorrect_ending"],
         "topic": original_test_df.get("topic", None),
         "category": original_test_df.get("category", None),
+        "generated_by": original_test_df.get("generated_by", None),
+        "language": original_test_df.get("language", None)
     })
  
     print("Reconstructed_df:",len(reconstructed_df))
