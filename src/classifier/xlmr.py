@@ -416,12 +416,12 @@ for num_sent in [4]:
         raise ValueError("Mismatch between test dataset rows and predictions.")
 
     # Save the reconstructed DataFrame to a CSV file
-    output_path = get_unique_filename(f"result3_{args.test_language}/test_xlmr_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv")
+    output_path = get_unique_filename(f"result_{args.test_language}/test_xlmr_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv")
     reconstructed_df.to_csv(output_path, index=False)
     logger.info(f"Predictions saved to {output_path}")
 
 # Generate unique file name if the file already exists
-output_filename = get_unique_filename(f"result3_{args.test_language}/xlmr_{args.train_set}_scores.txt")
+output_filename = get_unique_filename(f"result_{args.test_language}/xlmr_{args.train_set}_scores.txt")
 
 # Write the scores to a text file with the unique name
 with open(output_filename, 'w') as f:

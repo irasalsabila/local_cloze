@@ -1,0 +1,1 @@
+Num Sentences: 4, Best Test Accuracy: 0.8279773156899811, Best Dev Accuracy: 0.7007692307692308, Best Loss: 0.03663488911772342

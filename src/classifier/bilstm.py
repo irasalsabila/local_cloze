@@ -471,7 +471,7 @@ for num_sent in [4]:
     
     # Save the reconstructed DataFrame
     output_path = get_unique_filename(
-        f"result2_{args.test_language}/test_bilstm_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv"
+        f"result_{args.test_language}/test_bilstm_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv"
     )
     original_test_df.to_csv(output_path, index=False)
     print(f"Predictions saved to {output_path}")
