@@ -111,7 +111,7 @@ meteor = load('meteor')
 meteor_score = meteor.compute(predictions=predicted_endings, references=correct_endings)
 
 #write scores to an external file
-with open(f"result_{test_language}/{model_name.split('/')[-1]}_{train_set}.txt", "w") as f:
+with open(f"result_{test_language}/{train_set}.txt", "w") as f:
     f.write(f"ROUGE: {rouge_score}\n")
     f.write(f"BERTScore: {bert_score}\n")
     f.write(f"BLEU: {bleu_score}\n")
