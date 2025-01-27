@@ -36,8 +36,9 @@ fasttext.util.download_model('jv', if_exists='ignore')
 def get_unique_filename(base_filename):
     counter = 1
     filename = base_filename
+    base, ext = os.path.splitext(base_filename)  # Split filename and extension
     while os.path.exists(filename):
-        filename = f"{base_filename.rsplit('.', 1)[0]}_{counter}.txt"
+        filename = f"{base}_{counter}{ext}"  # Append counter before the extension
         counter += 1
     return filename
 
@@ -209,6 +210,7 @@ def model_with_fasttext(
             )
             prob_distrib = sent_model.predict([dev_sent, dev_denom], batch_size=1000)
             acc_dev = get_accuracy(prob_distrib, dev_label)
+            print(get_accuracy)
             if acc_dev > best_acc_dev:
                 best_acc_dev = acc_dev
                 patience = 0
@@ -216,8 +218,16 @@ def model_with_fasttext(
                 patience += 1
             print(f"Epoch {epoch} - Dev Acc: {acc_dev}")
 
+        # prediction prob for test
         prob_distrib = sent_model.predict([test_sent, test_denom], batch_size=1000)
-        predictions = (prob_distrib > 0.5).astype(int)  # Binary predictions
+
+        predictions = []
+        for i in range(0, len(prob_distrib), 2):
+            if prob_distrib[i] > prob_distrib[i+1]:
+                predictions.append(1)
+            else:
+                predictions.append(0)
+
         best_acc_test = get_accuracy(prob_distrib, test_label)
     print("Test Acc:", best_acc_test)
     print(
@@ -283,33 +293,6 @@ def train_and_test_fasttext(trainset, testset, args):
         tokenizer,
         args,
     )
-
-
-# def read_data(fname, num_sent=4):
-#     contexts = []
-#     labels = []
-#     data = pd.read_csv(fname)
-#     for idx, row in data.iterrows():
-#         sents = []
-#         for i in [4, 3, 2, 1]:
-#             if len(sents) == num_sent:
-#                 break
-#             sents.insert(0, row[f"sentence_{i}"])
-#         ending1 = row["correct_ending"]
-#         ending2 = row["incorrect_ending"]
-
-#         if num_sent == 0:
-#             contexts.append([ending1])
-#         else:
-#             contexts.append(sents + [ending1])
-#         labels.append(1)
-        
-#         if num_sent == 0:
-#             contexts.append([ending2])
-#         else:
-#             contexts.append(sents + [ending2])
-#         labels.append(0)
-#     return contexts, labels
 
 def read_data(fname, num_sent=4, test_language=None):
     contexts = []
@@ -389,12 +372,6 @@ for num_sent in [4]:
     trainset = list(zip(*trainset))
     print("Train set loaded")
 
-    # assert args.test_language in ["su", "jv"]
-    # if args.test_language == "su":
-    #     testset = read_data("../../dataset/test/test_su.csv", args.num_sent)
-    # else:
-    #     testset = read_data("../../dataset/test/test_jv.csv", args.num_sent)
-
     print("Test language:", args.test_language)
 
     print(f"Debug: args.test_language = '{args.test_language}' (repr: {repr(args.test_language)})")
@@ -437,8 +414,6 @@ for num_sent in [4]:
     print("-------------------------------------------")
     scores[num_sent] = test_score
 
-    # predictions = (np.array(test_score) > 0.5).astype(int)  # Convert probabilities to binary predictions
-
     reconstructed_df = pd.DataFrame({
         "sentence_1": original_test_df["sentence_1"],
         "sentence_2": original_test_df["sentence_2"],
@@ -456,30 +431,30 @@ for num_sent in [4]:
     print("Generated predictions:", len(predictions))
     print("Predictions shape:", predictions.shape)
 
-    print("Test dataset shape (sents):", len(test_dataset[0]))
-    print("Test dataset shape (labels):", len(test_dataset[1]))
-    print("Predictions length:", len(predictions))
-
-
-    if len(predictions) == 2 * len(reconstructed_df):
-        grouped_predictions = [
-            (predictions[i], predictions[i + 1])
-            for i in range(0, len(predictions), 2)
-        ]
-        reconstructed_df["predictions"] = [pair[0] for pair in grouped_predictions]
-        print("Predictions successfully mapped to DataFrame.")
+    # Ensure the length matches
+    if len(reconstructed_df) == len(predictions):
+        reconstructed_df["predictions"] = predictions
     else:
         raise ValueError("Mismatch between test dataset rows and predictions.")
-    
-    # Save the reconstructed DataFrame
-    output_path = get_unique_filename(
-        f"result2_{args.test_language}/test_bilstm_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv"
-    )
-    original_test_df.to_csv(output_path, index=False)
-    print(f"Predictions saved to {output_path}")
 
-output_filename = get_unique_filename(f"result_{args.test_language}/bilstm_{args.train_set}_scores.txt")
+    # Save the reconstructed DataFrame only for num_sent == 4 and test_language == 'jv' or 'su'
+    if num_sent == 4 and args.test_language in ['jv', 'su']:
+        output_path = get_unique_filename(
+            f"result_{args.test_language}/test_bilstm_{args.test_language}_in_{args.train_set}_with_preds.csv"
+        )
+        reconstructed_df.to_csv(output_path, index=False)
+        print(f"Predictions saved to {output_path}")
 
-with open(output_filename, 'w') as f:
+
+# output_filename = get_unique_filename(f"result_{args.test_language}/bilstm_{args.train_set}_scores.txt")
+
+# with open(output_filename, 'w') as f:
+#     for k, v in scores.items():
+#         f.write(f"{k}: {v}\n")
+
+# Append results to a single file based on train_set
+output_filename = f"result_{args.test_language}/bilstm_{args.train_set}_scores.txt"
+with open(output_filename, 'a') as f:  # Open file in append mode
     for k, v in scores.items():
-        f.write(f"{k}: {v}\n")
+        f.write(f"bilstm_{args.train_set}_score {k} --> {v}\n")
+print(f"Scores appended to {output_filename}")
