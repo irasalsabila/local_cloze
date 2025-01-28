@@ -1,0 +1,3 @@
+bilstm_id_jvsu_mixtral_score 4 --> 0.628
+bilstm_id_jvsu_mixtral_score 4 --> 0.584
+bilstm_id_jvsu_mixtral_score 4 --> 0.596

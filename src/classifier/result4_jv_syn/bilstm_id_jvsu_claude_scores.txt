@@ -1,0 +1,3 @@
+bilstm_id_jvsu_claude_score 4 --> 0.7618147448015122
+bilstm_id_jvsu_claude_score 4 --> 0.7145557655954632
+bilstm_id_jvsu_claude_score 4 --> 0.724007561436673
