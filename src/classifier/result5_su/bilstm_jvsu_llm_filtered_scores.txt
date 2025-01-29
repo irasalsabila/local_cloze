@@ -1,0 +1,3 @@
+bilstm_jvsu_llm_filtered_score 4 --> 0.659963436928702
+bilstm_jvsu_llm_filtered_score 4 --> 0.6526508226691042
+bilstm_jvsu_llm_filtered_score 4 --> 0.649908592321755

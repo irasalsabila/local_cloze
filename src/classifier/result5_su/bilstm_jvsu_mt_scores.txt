@@ -1,0 +1,3 @@
+bilstm_jvsu_mt_score 4 --> 0.5758683729433273
+bilstm_jvsu_mt_score 4 --> 0.6124314442413162
+bilstm_jvsu_mt_score 4 --> 0.5621572212065814
