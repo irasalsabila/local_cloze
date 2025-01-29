@@ -1,0 +1,366 @@
+Filename: runtime_bilstm_1_in_su_noid.csv
+Accuracy for jvsu_claude_preds: 0.6225
+Accuracy for jvsu_cohere_preds: 0.5420
+Accuracy for jvsu_gemma2_preds: 0.5850
+Accuracy for jvsu_gpt4o_preds: 0.6271
+Accuracy for jvsu_llama_preds: 0.5832
+Accuracy for jvsu_mixtral_preds: 0.5649
+Accuracy for jvsu_mt_preds: 0.5759
+Accuracy for jvsu_llm_preds: 0.6481
+Accuracy for jvsu_llm_filtered_preds: 0.6600
+MT Accuracy for jvsu_claude_preds: 0.6360
+MT Accuracy for jvsu_cohere_preds: 0.5700
+MT Accuracy for jvsu_gemma2_preds: 0.5900
+MT Accuracy for jvsu_gpt4o_preds: 0.6160
+MT Accuracy for jvsu_llama_preds: 0.6000
+MT Accuracy for jvsu_mixtral_preds: 0.5780
+MT Accuracy for jvsu_mt_preds: 0.5960
+MT Accuracy for jvsu_llm_preds: 0.6360
+MT Accuracy for jvsu_llm_filtered_preds: 0.6340
+Writing Accuracy for jvsu_claude_preds: 0.6111
+Writing Accuracy for jvsu_cohere_preds: 0.5185
+Writing Accuracy for jvsu_gemma2_preds: 0.5808
+Writing Accuracy for jvsu_gpt4o_preds: 0.6364
+Writing Accuracy for jvsu_llama_preds: 0.5690
+Writing Accuracy for jvsu_mixtral_preds: 0.5539
+Writing Accuracy for jvsu_mt_preds: 0.5589
+Writing Accuracy for jvsu_llm_preds: 0.6582
+Writing Accuracy for jvsu_llm_filtered_preds: 0.6818
+---------
+Filename: runtime_bilstm_1_in_su_withid.csv
+Accuracy for id_preds: 0.5009
+Accuracy for id_jvsu_claude_preds: 0.6335
+Accuracy for id_jvsu_cohere_preds: 0.5832
+Accuracy for id_jvsu_gemma2_preds: 0.5923
+Accuracy for id_jvsu_gpt4o_preds: 0.6261
+Accuracy for id_jvsu_llama_preds: 0.6188
+Accuracy for id_jvsu_mixtral_preds: 0.5905
+Accuracy for id_jvsu_mt_preds: 0.5676
+Accuracy for id_jvsu_llm_preds: 0.6581
+Accuracy for id_jvsu_llm_filtered_preds: 0.6307
+MT Accuracy for id_preds: 0.5120
+MT Accuracy for id_jvsu_claude_preds: 0.5780
+MT Accuracy for id_jvsu_cohere_preds: 0.5880
+MT Accuracy for id_jvsu_gemma2_preds: 0.5940
+MT Accuracy for id_jvsu_gpt4o_preds: 0.6160
+MT Accuracy for id_jvsu_llama_preds: 0.6020
+MT Accuracy for id_jvsu_mixtral_preds: 0.5720
+MT Accuracy for id_jvsu_mt_preds: 0.5760
+MT Accuracy for id_jvsu_llm_preds: 0.6520
+MT Accuracy for id_jvsu_llm_filtered_preds: 0.6140
+Writing Accuracy for id_preds: 0.4916
+Writing Accuracy for id_jvsu_claude_preds: 0.6801
+Writing Accuracy for id_jvsu_cohere_preds: 0.5791
+Writing Accuracy for id_jvsu_gemma2_preds: 0.5909
+Writing Accuracy for id_jvsu_gpt4o_preds: 0.6347
+Writing Accuracy for id_jvsu_llama_preds: 0.6330
+Writing Accuracy for id_jvsu_mixtral_preds: 0.6061
+Writing Accuracy for id_jvsu_mt_preds: 0.5606
+Writing Accuracy for id_jvsu_llm_preds: 0.6633
+Writing Accuracy for id_jvsu_llm_filtered_preds: 0.6448
+---------
+Filename: runtime_bilstm_2_in_su_noid.csv
+Accuracy for jvsu_claude_preds: 0.6225
+Accuracy for jvsu_cohere_preds: 0.5420
+Accuracy for jvsu_gemma2_preds: 0.5850
+Accuracy for jvsu_gpt4o_preds: 0.6271
+Accuracy for jvsu_llama_preds: 0.5832
+Accuracy for jvsu_mixtral_preds: 0.5649
+Accuracy for jvsu_mt_preds: 0.5759
+Accuracy for jvsu_llm_preds: 0.6481
+Accuracy for jvsu_llm_filtered_preds: 0.6600
+MT Accuracy for jvsu_claude_preds: 0.6360
+MT Accuracy for jvsu_cohere_preds: 0.5700
+MT Accuracy for jvsu_gemma2_preds: 0.5900
+MT Accuracy for jvsu_gpt4o_preds: 0.6160
+MT Accuracy for jvsu_llama_preds: 0.6000
+MT Accuracy for jvsu_mixtral_preds: 0.5780
+MT Accuracy for jvsu_mt_preds: 0.5960
+MT Accuracy for jvsu_llm_preds: 0.6360
+MT Accuracy for jvsu_llm_filtered_preds: 0.6340
+Writing Accuracy for jvsu_claude_preds: 0.6111
+Writing Accuracy for jvsu_cohere_preds: 0.5185
+Writing Accuracy for jvsu_gemma2_preds: 0.5808
+Writing Accuracy for jvsu_gpt4o_preds: 0.6364
+Writing Accuracy for jvsu_llama_preds: 0.5690
+Writing Accuracy for jvsu_mixtral_preds: 0.5539
+Writing Accuracy for jvsu_mt_preds: 0.5589
+Writing Accuracy for jvsu_llm_preds: 0.6582
+Writing Accuracy for jvsu_llm_filtered_preds: 0.6818
+---------
+Filename: runtime_bilstm_2_in_su_withid.csv
+Accuracy for id_preds: 0.5009
+Accuracy for id_jvsu_claude_preds: 0.6335
+Accuracy for id_jvsu_cohere_preds: 0.5832
+Accuracy for id_jvsu_gemma2_preds: 0.5923
+Accuracy for id_jvsu_gpt4o_preds: 0.6261
+Accuracy for id_jvsu_llama_preds: 0.6188
+Accuracy for id_jvsu_mixtral_preds: 0.5905
+Accuracy for id_jvsu_mt_preds: 0.5676
+Accuracy for id_jvsu_llm_preds: 0.6581
+Accuracy for id_jvsu_llm_filtered_preds: 0.6307
+MT Accuracy for id_preds: 0.5120
+MT Accuracy for id_jvsu_claude_preds: 0.5780
+MT Accuracy for id_jvsu_cohere_preds: 0.5880
+MT Accuracy for id_jvsu_gemma2_preds: 0.5940
+MT Accuracy for id_jvsu_gpt4o_preds: 0.6160
+MT Accuracy for id_jvsu_llama_preds: 0.6020
+MT Accuracy for id_jvsu_mixtral_preds: 0.5720
+MT Accuracy for id_jvsu_mt_preds: 0.5760
+MT Accuracy for id_jvsu_llm_preds: 0.6520
+MT Accuracy for id_jvsu_llm_filtered_preds: 0.6140
+Writing Accuracy for id_preds: 0.4916
+Writing Accuracy for id_jvsu_claude_preds: 0.6801
+Writing Accuracy for id_jvsu_cohere_preds: 0.5791
+Writing Accuracy for id_jvsu_gemma2_preds: 0.5909
+Writing Accuracy for id_jvsu_gpt4o_preds: 0.6347
+Writing Accuracy for id_jvsu_llama_preds: 0.6330
+Writing Accuracy for id_jvsu_mixtral_preds: 0.6061
+Writing Accuracy for id_jvsu_mt_preds: 0.5606
+Writing Accuracy for id_jvsu_llm_preds: 0.6633
+Writing Accuracy for id_jvsu_llm_filtered_preds: 0.6448
+---------
+Filename: runtime_bilstm_3_in_su_noid.csv
+Accuracy for jvsu_claude_preds: 0.6225
+Accuracy for jvsu_cohere_preds: 0.5420
+Accuracy for jvsu_gemma2_preds: 0.5850
+Accuracy for jvsu_gpt4o_preds: 0.6271
+Accuracy for jvsu_llama_preds: 0.5832
+Accuracy for jvsu_mixtral_preds: 0.5649
+Accuracy for jvsu_mt_preds: 0.5759
+Accuracy for jvsu_llm_preds: 0.6481
+Accuracy for jvsu_llm_filtered_preds: 0.6600
+MT Accuracy for jvsu_claude_preds: 0.6360
+MT Accuracy for jvsu_cohere_preds: 0.5700
+MT Accuracy for jvsu_gemma2_preds: 0.5900
+MT Accuracy for jvsu_gpt4o_preds: 0.6160
+MT Accuracy for jvsu_llama_preds: 0.6000
+MT Accuracy for jvsu_mixtral_preds: 0.5780
+MT Accuracy for jvsu_mt_preds: 0.5960
+MT Accuracy for jvsu_llm_preds: 0.6360
+MT Accuracy for jvsu_llm_filtered_preds: 0.6340
+Writing Accuracy for jvsu_claude_preds: 0.6111
+Writing Accuracy for jvsu_cohere_preds: 0.5185
+Writing Accuracy for jvsu_gemma2_preds: 0.5808
+Writing Accuracy for jvsu_gpt4o_preds: 0.6364
+Writing Accuracy for jvsu_llama_preds: 0.5690
+Writing Accuracy for jvsu_mixtral_preds: 0.5539
+Writing Accuracy for jvsu_mt_preds: 0.5589
+Writing Accuracy for jvsu_llm_preds: 0.6582
+Writing Accuracy for jvsu_llm_filtered_preds: 0.6818
+---------
+Filename: runtime_bilstm_3_in_su_withid.csv
+Accuracy for id_preds: 0.5009
+Accuracy for id_jvsu_claude_preds: 0.6335
+Accuracy for id_jvsu_cohere_preds: 0.5832
+Accuracy for id_jvsu_gemma2_preds: 0.5923
+Accuracy for id_jvsu_gpt4o_preds: 0.6261
+Accuracy for id_jvsu_llama_preds: 0.6188
+Accuracy for id_jvsu_mixtral_preds: 0.5905
+Accuracy for id_jvsu_mt_preds: 0.5676
+Accuracy for id_jvsu_llm_preds: 0.6581
+Accuracy for id_jvsu_llm_filtered_preds: 0.6307
+MT Accuracy for id_preds: 0.5120
+MT Accuracy for id_jvsu_claude_preds: 0.5780
+MT Accuracy for id_jvsu_cohere_preds: 0.5880
+MT Accuracy for id_jvsu_gemma2_preds: 0.5940
+MT Accuracy for id_jvsu_gpt4o_preds: 0.6160
+MT Accuracy for id_jvsu_llama_preds: 0.6020
+MT Accuracy for id_jvsu_mixtral_preds: 0.5720
+MT Accuracy for id_jvsu_mt_preds: 0.5760
+MT Accuracy for id_jvsu_llm_preds: 0.6520
+MT Accuracy for id_jvsu_llm_filtered_preds: 0.6140
+Writing Accuracy for id_preds: 0.4916
+Writing Accuracy for id_jvsu_claude_preds: 0.6801
+Writing Accuracy for id_jvsu_cohere_preds: 0.5791
+Writing Accuracy for id_jvsu_gemma2_preds: 0.5909
+Writing Accuracy for id_jvsu_gpt4o_preds: 0.6347
+Writing Accuracy for id_jvsu_llama_preds: 0.6330
+Writing Accuracy for id_jvsu_mixtral_preds: 0.6061
+Writing Accuracy for id_jvsu_mt_preds: 0.5606
+Writing Accuracy for id_jvsu_llm_preds: 0.6633
+Writing Accuracy for id_jvsu_llm_filtered_preds: 0.6448
+---------
+Filename: runtime_xlmr_1_in_su_noid.csv
+Accuracy for jvsu_claude_preds: 0.7413
+Accuracy for jvsu_cohere_preds: 0.6846
+Accuracy for jvsu_gemma2_preds: 0.7002
+Accuracy for jvsu_gpt4o_preds: 0.6947
+Accuracy for jvsu_llama_preds: 0.6590
+Accuracy for jvsu_mixtral_preds: 0.5311
+Accuracy for jvsu_mt_preds: 0.7523
+Accuracy for jvsu_llm_preds: 0.7303
+Accuracy for jvsu_llm_filtered_preds: 0.7303
+MT Accuracy for jvsu_claude_preds: 0.7000
+MT Accuracy for jvsu_cohere_preds: 0.6500
+MT Accuracy for jvsu_gemma2_preds: 0.6740
+MT Accuracy for jvsu_gpt4o_preds: 0.6660
+MT Accuracy for jvsu_llama_preds: 0.6200
+MT Accuracy for jvsu_mixtral_preds: 0.5200
+MT Accuracy for jvsu_mt_preds: 0.7400
+MT Accuracy for jvsu_llm_preds: 0.6840
+MT Accuracy for jvsu_llm_filtered_preds: 0.6940
+Writing Accuracy for jvsu_claude_preds: 0.7761
+Writing Accuracy for jvsu_cohere_preds: 0.7138
+Writing Accuracy for jvsu_gemma2_preds: 0.7222
+Writing Accuracy for jvsu_gpt4o_preds: 0.7189
+Writing Accuracy for jvsu_llama_preds: 0.6919
+Writing Accuracy for jvsu_mixtral_preds: 0.5404
+Writing Accuracy for jvsu_mt_preds: 0.7626
+Writing Accuracy for jvsu_llm_preds: 0.7694
+Writing Accuracy for jvsu_llm_filtered_preds: 0.7609
+---------
+Filename: runtime_xlmr_1_in_su_withid.csv
+Accuracy for id_preds: 0.6901
+Accuracy for id_jvsu_claude_preds: 0.7404
+Accuracy for id_jvsu_cohere_preds: 0.7112
+Accuracy for id_jvsu_gemma2_preds: 0.7386
+Accuracy for id_jvsu_gpt4o_preds: 0.7623
+Accuracy for id_jvsu_llama_preds: 0.7048
+Accuracy for id_jvsu_mixtral_preds: 0.7048
+Accuracy for id_jvsu_mt_preds: 0.7559
+Accuracy for id_jvsu_llm_preds: 0.7331
+Accuracy for id_jvsu_llm_filtered_preds: 0.7495
+MT Accuracy for id_preds: 0.7020
+MT Accuracy for id_jvsu_claude_preds: 0.7140
+MT Accuracy for id_jvsu_cohere_preds: 0.6960
+MT Accuracy for id_jvsu_gemma2_preds: 0.7040
+MT Accuracy for id_jvsu_gpt4o_preds: 0.7300
+MT Accuracy for id_jvsu_llama_preds: 0.6860
+MT Accuracy for id_jvsu_mixtral_preds: 0.7060
+MT Accuracy for id_jvsu_mt_preds: 0.7260
+MT Accuracy for id_jvsu_llm_preds: 0.7120
+MT Accuracy for id_jvsu_llm_filtered_preds: 0.7240
+Writing Accuracy for id_preds: 0.6801
+Writing Accuracy for id_jvsu_claude_preds: 0.7626
+Writing Accuracy for id_jvsu_cohere_preds: 0.7239
+Writing Accuracy for id_jvsu_gemma2_preds: 0.7677
+Writing Accuracy for id_jvsu_gpt4o_preds: 0.7896
+Writing Accuracy for id_jvsu_llama_preds: 0.7205
+Writing Accuracy for id_jvsu_mixtral_preds: 0.7037
+Writing Accuracy for id_jvsu_mt_preds: 0.7811
+Writing Accuracy for id_jvsu_llm_preds: 0.7508
+Writing Accuracy for id_jvsu_llm_filtered_preds: 0.7710
+---------
+Filename: runtime_xlmr_2_in_su_noid.csv
+Accuracy for jvsu_claude_preds: 0.7413
+Accuracy for jvsu_cohere_preds: 0.6846
+Accuracy for jvsu_gemma2_preds: 0.7002
+Accuracy for jvsu_gpt4o_preds: 0.6947
+Accuracy for jvsu_llama_preds: 0.6590
+Accuracy for jvsu_mixtral_preds: 0.5311
+Accuracy for jvsu_mt_preds: 0.7523
+Accuracy for jvsu_llm_preds: 0.7303
+Accuracy for jvsu_llm_filtered_preds: 0.7303
+MT Accuracy for jvsu_claude_preds: 0.7000
+MT Accuracy for jvsu_cohere_preds: 0.6500
+MT Accuracy for jvsu_gemma2_preds: 0.6740
+MT Accuracy for jvsu_gpt4o_preds: 0.6660
+MT Accuracy for jvsu_llama_preds: 0.6200
+MT Accuracy for jvsu_mixtral_preds: 0.5200
+MT Accuracy for jvsu_mt_preds: 0.7400
+MT Accuracy for jvsu_llm_preds: 0.6840
+MT Accuracy for jvsu_llm_filtered_preds: 0.6940
+Writing Accuracy for jvsu_claude_preds: 0.7761
+Writing Accuracy for jvsu_cohere_preds: 0.7138
+Writing Accuracy for jvsu_gemma2_preds: 0.7222
+Writing Accuracy for jvsu_gpt4o_preds: 0.7189
+Writing Accuracy for jvsu_llama_preds: 0.6919
+Writing Accuracy for jvsu_mixtral_preds: 0.5404
+Writing Accuracy for jvsu_mt_preds: 0.7626
+Writing Accuracy for jvsu_llm_preds: 0.7694
+Writing Accuracy for jvsu_llm_filtered_preds: 0.7609
+---------
+Filename: runtime_xlmr_2_in_su_withid.csv
+Accuracy for id_preds: 0.6901
+Accuracy for id_jvsu_claude_preds: 0.7404
+Accuracy for id_jvsu_cohere_preds: 0.7112
+Accuracy for id_jvsu_gemma2_preds: 0.7386
+Accuracy for id_jvsu_gpt4o_preds: 0.7623
+Accuracy for id_jvsu_llama_preds: 0.7048
+Accuracy for id_jvsu_mixtral_preds: 0.7048
+Accuracy for id_jvsu_mt_preds: 0.7559
+Accuracy for id_jvsu_llm_preds: 0.7331
+Accuracy for id_jvsu_llm_filtered_preds: 0.7495
+MT Accuracy for id_preds: 0.7020
+MT Accuracy for id_jvsu_claude_preds: 0.7140
+MT Accuracy for id_jvsu_cohere_preds: 0.6960
+MT Accuracy for id_jvsu_gemma2_preds: 0.7040
+MT Accuracy for id_jvsu_gpt4o_preds: 0.7300
+MT Accuracy for id_jvsu_llama_preds: 0.6860
+MT Accuracy for id_jvsu_mixtral_preds: 0.7060
+MT Accuracy for id_jvsu_mt_preds: 0.7260
+MT Accuracy for id_jvsu_llm_preds: 0.7120
+MT Accuracy for id_jvsu_llm_filtered_preds: 0.7240
+Writing Accuracy for id_preds: 0.6801
+Writing Accuracy for id_jvsu_claude_preds: 0.7626
+Writing Accuracy for id_jvsu_cohere_preds: 0.7239
+Writing Accuracy for id_jvsu_gemma2_preds: 0.7677
+Writing Accuracy for id_jvsu_gpt4o_preds: 0.7896
+Writing Accuracy for id_jvsu_llama_preds: 0.7205
+Writing Accuracy for id_jvsu_mixtral_preds: 0.7037
+Writing Accuracy for id_jvsu_mt_preds: 0.7811
+Writing Accuracy for id_jvsu_llm_preds: 0.7508
+Writing Accuracy for id_jvsu_llm_filtered_preds: 0.7710
+---------
+Filename: runtime_xlmr_3_in_su_noid.csv
+Accuracy for jvsu_claude_preds: 0.7413
+Accuracy for jvsu_cohere_preds: 0.6846
+Accuracy for jvsu_gemma2_preds: 0.7002
+Accuracy for jvsu_gpt4o_preds: 0.6947
+Accuracy for jvsu_llama_preds: 0.6590
+Accuracy for jvsu_mixtral_preds: 0.5311
+Accuracy for jvsu_mt_preds: 0.7523
+Accuracy for jvsu_llm_preds: 0.7303
+Accuracy for jvsu_llm_filtered_preds: 0.7303
+MT Accuracy for jvsu_claude_preds: 0.7000
+MT Accuracy for jvsu_cohere_preds: 0.6500
+MT Accuracy for jvsu_gemma2_preds: 0.6740
+MT Accuracy for jvsu_gpt4o_preds: 0.6660
+MT Accuracy for jvsu_llama_preds: 0.6200
+MT Accuracy for jvsu_mixtral_preds: 0.5200
+MT Accuracy for jvsu_mt_preds: 0.7400
+MT Accuracy for jvsu_llm_preds: 0.6840
+MT Accuracy for jvsu_llm_filtered_preds: 0.6940
+Writing Accuracy for jvsu_claude_preds: 0.7761
+Writing Accuracy for jvsu_cohere_preds: 0.7138
+Writing Accuracy for jvsu_gemma2_preds: 0.7222
+Writing Accuracy for jvsu_gpt4o_preds: 0.7189
+Writing Accuracy for jvsu_llama_preds: 0.6919
+Writing Accuracy for jvsu_mixtral_preds: 0.5404
+Writing Accuracy for jvsu_mt_preds: 0.7626
+Writing Accuracy for jvsu_llm_preds: 0.7694
+Writing Accuracy for jvsu_llm_filtered_preds: 0.7609
+---------
+Filename: runtime_xlmr_3_in_su_withid.csv
+Accuracy for id_preds: 0.6901
+Accuracy for id_jvsu_claude_preds: 0.7404
+Accuracy for id_jvsu_cohere_preds: 0.7112
+Accuracy for id_jvsu_gemma2_preds: 0.7386
+Accuracy for id_jvsu_gpt4o_preds: 0.7623
+Accuracy for id_jvsu_llama_preds: 0.7048
+Accuracy for id_jvsu_mixtral_preds: 0.7048
+Accuracy for id_jvsu_mt_preds: 0.7559
+Accuracy for id_jvsu_llm_preds: 0.7331
+Accuracy for id_jvsu_llm_filtered_preds: 0.7495
+MT Accuracy for id_preds: 0.7020
+MT Accuracy for id_jvsu_claude_preds: 0.7140
+MT Accuracy for id_jvsu_cohere_preds: 0.6960
+MT Accuracy for id_jvsu_gemma2_preds: 0.7040
+MT Accuracy for id_jvsu_gpt4o_preds: 0.7300
+MT Accuracy for id_jvsu_llama_preds: 0.6860
+MT Accuracy for id_jvsu_mixtral_preds: 0.7060
+MT Accuracy for id_jvsu_mt_preds: 0.7260
+MT Accuracy for id_jvsu_llm_preds: 0.7120
+MT Accuracy for id_jvsu_llm_filtered_preds: 0.7240
+Writing Accuracy for id_preds: 0.6801
+Writing Accuracy for id_jvsu_claude_preds: 0.7626
+Writing Accuracy for id_jvsu_cohere_preds: 0.7239
+Writing Accuracy for id_jvsu_gemma2_preds: 0.7677
+Writing Accuracy for id_jvsu_gpt4o_preds: 0.7896
+Writing Accuracy for id_jvsu_llama_preds: 0.7205
+Writing Accuracy for id_jvsu_mixtral_preds: 0.7037
+Writing Accuracy for id_jvsu_mt_preds: 0.7811
+Writing Accuracy for id_jvsu_llm_preds: 0.7508
+Writing Accuracy for id_jvsu_llm_filtered_preds: 0.7710
+---------
