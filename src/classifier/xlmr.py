@@ -126,30 +126,6 @@ def prediction(dataset, model, args):
         preds += prediction
     return accuracy_score(golds, preds), preds
 
-# def read_data(fname, num_sent=4):
-#     contexts = []
-#     endings = []
-#     labels = []
-#     data = pd.read_csv(fname)
-#     for idx, row in data.iterrows():
-#         sents = []
-#         for i in [4,3,2,1]:
-#             if len(sents) == num_sent:
-#                 break
-#             sents.insert(0, row[f'sentence_{i}'])
-#         context = ' '.join(sents) 
-#         ending1 = row['correct_ending']
-#         ending2 = row['incorrect_ending']
-        
-#         contexts.append(context)
-#         endings.append(ending1)
-#         labels.append(1)
-        
-#         contexts.append(context)
-#         endings.append(ending2)
-#         labels.append(0)
-#     return contexts, endings, labels
-
 def read_data(fname, num_sent=4, test_language=None):
     contexts = []
     endings = []
@@ -417,15 +393,17 @@ for num_sent in [4]:
     else:
         raise ValueError("Mismatch between test dataset rows and predictions.")
 
-    # Save the reconstructed DataFrame to a CSV file
-    output_path = get_unique_filename(f"result3_{args.test_language}/test_xlmr_{args.test_language}_in_{args.train_set}_num_sent_{num_sent}_with_preds.csv")
-    reconstructed_df.to_csv(output_path, index=False)
-    logger.info(f"Predictions saved to {output_path}")
+    # Save the reconstructed DataFrame only for num_sent == 4 and test_language == 'jv' or 'su'
+    if num_sent == 4 and args.test_language in ['jv', 'su']:
+        output_path = get_unique_filename(
+            f"result_{args.test_language}/test_xlmr_{args.test_language}_in_{args.train_set}_with_preds.csv"
+        )
+        reconstructed_df.to_csv(output_path, index=False)
+        print(f"Predictions saved to {output_path}")
 
-# Generate unique file name if the file already exists
-output_filename = get_unique_filename(f"result3_{args.test_language}/xlmr_{args.train_set}_scores.txt")
-
-# Write the scores to a text file with the unique name
-with open(output_filename, 'w') as f:
-    for num_sent, score in scores.items():
-        f.write(f"Num Sentences: {num_sent}, Best Test Accuracy: {score['best_acc_test']}, Best Dev Accuracy: {score['best_acc_dev']}, Best Loss: {score['best_loss']}\n")
+# Append results to a single file based on train_set
+output_filename = f"result_{args.test_language}/xlmr_{args.train_set}_scores.txt"
+with open(output_filename, 'a') as f:  # Open file in append mode
+    for k, v in scores.items():
+        f.write(f"xlmr_{args.train_set}_score {k} --> {v}\n")
+print(f"Scores appended to {output_filename}")

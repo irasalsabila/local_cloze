@@ -445,13 +445,6 @@ for num_sent in [4]:
         reconstructed_df.to_csv(output_path, index=False)
         print(f"Predictions saved to {output_path}")
 
-
-# output_filename = get_unique_filename(f"result_{args.test_language}/bilstm_{args.train_set}_scores.txt")
-
-# with open(output_filename, 'w') as f:
-#     for k, v in scores.items():
-#         f.write(f"{k}: {v}\n")
-
 # Append results to a single file based on train_set
 output_filename = f"result_{args.test_language}/bilstm_{args.train_set}_scores.txt"
 with open(output_filename, 'a') as f:  # Open file in append mode
