@@ -22,7 +22,7 @@ if args.model_name == 'cendol':
 elif args.model_name == 'komodo':
     model_name = "Yellow-AI-NLP/komodo-7b-base"
 elif args.model_name == 'sahabat':
-    model_name = 'GoToCompany/gemma2-9b-cpt-sahabatai-v1-instruct'
+    model_name = 'GoToCompany/gemma2-9b-cpt-sahabatai-v1-base'
 else:
     assert False, "Model name not found"
 
@@ -65,14 +65,25 @@ def load_test_data(data_path):
     from datasets import Dataset
     dataset = Dataset.from_dict({'context': contexts, 'ending': endings})
     def formatting_prompts_func(examples):
+        alpaca_prompt = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+
+    ### Instruction:
+    Generate a single sentence ending for the given story context.
+
+    ### Input:
+    {}
+
+    ### Response:
+    """
         contexts  = examples["context"]
         endings = examples["ending"]
         texts = []
         for context, ending in zip(contexts, endings):
-            chat = [
-                {"role": "user", "content": f"Generate the ending for the following given story context\nStory Context: {context}"},
-            ]
-            text = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
+            # chat = [
+            #     {"role": "user", "content": f"Generate the ending for the following given story context\nStory Context: {context}"},
+            # ]
+            # text = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
+            text = alpaca_prompt.format(context)
             texts.append(text)
         return { "text" : texts, }
     dataset = dataset.map(formatting_prompts_func, batched = True,)

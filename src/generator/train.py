@@ -27,11 +27,11 @@ dtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for
 load_in_4bit = True # Use 4bit quantization to reduce memory usage. Can be False.
 
 if args.model_name == 'cendol':
-    model_name = "indonlp/cendol-llama2-7b-chat"
+    model_name = "indonlp/cendol-llama2-7b-base"
 elif args.model_name == 'komodo':
     model_name = "Yellow-AI-NLP/komodo-7b-base"
 elif args.model_name == 'sahabat':
-    model_name = 'GoToCompany/gemma2-9b-cpt-sahabatai-v1-instruct'
+    model_name = 'GoToCompany/gemma2-9b-cpt-sahabatai-v1-base'
 else:
     assert False, "Model name not found"
 
@@ -83,16 +83,28 @@ def load_data(data_path):
     # convert to huggingface dataset
     from datasets import Dataset
     dataset = Dataset.from_dict({'context': contexts, 'ending': endings})
+    alpaca_prompt = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+
+    ### Instruction:
+    Generate a single sentence ending for the given story context.
+
+    ### Input:
+    {}
+
+    ### Response:
+    {}"""
+
     def formatting_prompts_func(examples):
         contexts  = examples["context"]
         endings = examples["ending"]
         texts = []
         for context, ending in zip(contexts, endings):
-            chat = [
-                {"role": "user", "content": f"Generate the ending for the following given story context\nStory Context: {context}"},
-                {"role": "assistant", "content": f"{ending}"},
-            ]
-            text = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=False) + EOS_TOKEN
+            # chat = [
+            #     {"role": "user", "content": f"\nStory Context: {context}"},
+            #     {"role": "assistant", "content": f"{ending}"},
+            # ]
+            # text = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=False) + EOS_TOKEN
+            text = alpaca_prompt.format(context, ending) + EOS_TOKEN
             texts.append(text)
         return { "text" : texts, }
     dataset = dataset.map(formatting_prompts_func, batched = True,)
@@ -113,9 +125,10 @@ trainer = SFTTrainer(
     dataset_num_proc = 2,
     packing = False, # Can make training 5x faster for short sequences.
     args = TrainingArguments(
-        per_device_train_batch_size = 2,
-        gradient_accumulation_steps = 4,
+        per_device_train_batch_size = 8,
+        gradient_accumulation_steps = 8,
         num_train_epochs = 2,
+        # max_steps=200,
         warmup_steps = 5,
         learning_rate = 2e-4,
         fp16 = not is_bfloat16_supported(),
