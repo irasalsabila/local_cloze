@@ -1,0 +1,3 @@
+xlmr_jvsu_openclose_score 4 --> {'best_acc_test': 0.7035957240038873, 'best_acc_dev': 0.6359223300970874, 'best_loss': 0.054424945131575246}
+xlmr_jvsu_openclose_score 4 --> {'best_acc_test': 0.7035957240038873, 'best_acc_dev': 0.6359223300970874, 'best_loss': 0.054424945131575246}
+xlmr_jvsu_openclose_score 4 --> {'best_acc_test': 0.7035957240038873, 'best_acc_dev': 0.6359223300970874, 'best_loss': 0.054424945131575246}

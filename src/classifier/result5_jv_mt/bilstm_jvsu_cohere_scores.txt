@@ -1,3 +1,0 @@
-bilstm_jvsu_cohere_score 4 --> 0.524
-bilstm_jvsu_cohere_score 4 --> 0.558
-bilstm_jvsu_cohere_score 4 --> 0.53

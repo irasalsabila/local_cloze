@@ -1,3 +1,0 @@
-bilstm_jvsu_gemma2_score 4 --> 0.512
-bilstm_jvsu_gemma2_score 4 --> 0.54
-bilstm_jvsu_gemma2_score 4 --> 0.522

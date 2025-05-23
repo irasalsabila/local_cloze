@@ -1,3 +1,0 @@
-bilstm_id_jvsu_claude_score 4 --> 0.562
-bilstm_id_jvsu_claude_score 4 --> 0.592
-bilstm_id_jvsu_claude_score 4 --> 0.568

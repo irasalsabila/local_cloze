@@ -1,3 +1,0 @@
-bilstm_id_jvsu_gpt4o_score 4 --> 0.6899810964083176
-bilstm_id_jvsu_gpt4o_score 4 --> 0.725897920604915
-bilstm_id_jvsu_gpt4o_score 4 --> 0.7107750472589792

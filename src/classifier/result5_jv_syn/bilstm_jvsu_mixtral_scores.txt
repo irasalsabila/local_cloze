@@ -1,3 +1,0 @@
-bilstm_jvsu_mixtral_score 4 --> 0.6370510396975425
-bilstm_jvsu_mixtral_score 4 --> 0.6465028355387523
-bilstm_jvsu_mixtral_score 4 --> 0.6502835538752363

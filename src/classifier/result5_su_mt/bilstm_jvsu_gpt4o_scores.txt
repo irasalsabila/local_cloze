@@ -1,3 +1,0 @@
-bilstm_jvsu_gpt4o_score 4 --> 0.61
-bilstm_jvsu_gpt4o_score 4 --> 0.604
-bilstm_jvsu_gpt4o_score 4 --> 0.632

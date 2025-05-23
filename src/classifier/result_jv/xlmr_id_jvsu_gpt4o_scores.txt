@@ -1,5 +1,3 @@
-Num Sentences: 0, Best Accuracy: 0.684, Best Loss: 0.010199239766129015
-Num Sentences: 1, Best Accuracy: 0.718, Best Loss: 0.007755366441077171
-Num Sentences: 2, Best Accuracy: 0.704, Best Loss: 0.006518171976672058
-Num Sentences: 3, Best Accuracy: 0.716, Best Loss: 0.0052436548615695635
-Num Sentences: 4, Best Accuracy: 0.716, Best Loss: 0.005565492923209187
+xlmr_id_jvsu_gpt4o_score 4 --> {'best_acc_test': 0.7687074829931972, 'best_acc_dev': 0.6601941747572816, 'best_loss': 0.019945511228268854}
+xlmr_id_jvsu_gpt4o_score 4 --> {'best_acc_test': 0.7706511175898931, 'best_acc_dev': 0.6650485436893204, 'best_loss': 0.08879087274068205}
+xlmr_id_jvsu_gpt4o_score 4 --> {'best_acc_test': 0.7687074829931972, 'best_acc_dev': 0.6650485436893204, 'best_loss': 0.038658606297964526}

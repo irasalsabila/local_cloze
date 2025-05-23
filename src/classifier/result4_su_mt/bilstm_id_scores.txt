@@ -1,3 +1,0 @@
-bilstm_id_score 4 --> 0.51
-bilstm_id_score 4 --> 0.488
-bilstm_id_score 4 --> 0.504

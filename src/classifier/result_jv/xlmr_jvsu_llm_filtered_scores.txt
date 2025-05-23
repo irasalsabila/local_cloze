@@ -1,0 +1,3 @@
+xlmr_jvsu_llm_filtered_score 4 --> {'best_acc_test': 0.718172983479106, 'best_acc_dev': 0.6553398058252428, 'best_loss': 0.020521646861686456}
+xlmr_jvsu_llm_filtered_score 4 --> {'best_acc_test': 0.718172983479106, 'best_acc_dev': 0.6553398058252428, 'best_loss': 0.020521646861686456}
+xlmr_jvsu_llm_filtered_score 4 --> {'best_acc_test': 0.718172983479106, 'best_acc_dev': 0.6553398058252428, 'best_loss': 0.020521646861686456}

@@ -1,3 +1,0 @@
-bilstm_jvsu_llm_filtered_score 4 --> 0.642
-bilstm_jvsu_llm_filtered_score 4 --> 0.638
-bilstm_jvsu_llm_filtered_score 4 --> 0.652

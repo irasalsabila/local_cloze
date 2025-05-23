@@ -1,3 +1,0 @@
-bilstm_id_jvsu_llama_score 4 --> 0.61
-bilstm_id_jvsu_llama_score 4 --> 0.636
-bilstm_id_jvsu_llama_score 4 --> 0.618
