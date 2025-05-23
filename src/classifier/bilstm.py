@@ -185,13 +185,12 @@ def model_with_fasttext(
         for epoch in range(args.iterations):
             if patience == args.patience:
                 break
-            split_idx = int(len(train_sent) * 0.8)
-            actual_train_sent = train_sent[:split_idx]
-            actual_train_denom = train_denom[:split_idx]
-            actual_train_label = train_label[:split_idx]
-            dev_sent = train_sent[split_idx:]
-            dev_denom = train_denom[split_idx:]
-            dev_label = train_label[split_idx:]
+            actual_train_sent = train_sent
+            actual_train_denom = train_denom
+            actual_train_label = train_label
+            dev_sent = test_sent[:int(0.2*len(test_sent))]
+            dev_denom = test_denom[:int(0.2*len(test_sent))]
+            dev_label = test_label[:int(0.2*len(test_sent))]
             if len(actual_train_sent) % 2 == 1:
                 actual_train_sent = actual_train_sent[:-1]
                 actual_train_denom = actual_train_denom[:-1]
@@ -382,7 +381,7 @@ for num_sent in [4]:
     print(f"Cleaned test_language: '{args.test_language}'")
 
     # Assertion after sanitization
-    assert args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'], (
+    assert args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn', 'all'], (
         f"Invalid test_language: {args.test_language}"
     )
 
@@ -390,6 +389,8 @@ for num_sent in [4]:
         test_path = '../../dataset/test/test_jv.csv'
     elif args.test_language in ['su', 'su_mt', 'su_syn']:
         test_path = '../../dataset/test/test_su.csv'
+    elif args.test_language == 'all':
+        test_path = '../../dataset/test/test_all.csv'
     else:
         raise ValueError("Unsupported test language")
 
@@ -427,9 +428,6 @@ for num_sent in [4]:
         "language": original_test_df.get("language", None)
     })
  
-    print("Reconstructed_df:",len(reconstructed_df))
-    print("Generated predictions:", len(predictions))
-    print("Predictions shape:", predictions.shape)
 
     # Ensure the length matches
     if len(reconstructed_df) == len(predictions):

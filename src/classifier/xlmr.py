@@ -166,12 +166,11 @@ def read_data(fname, num_sent=4, test_language=None):
 
 
 def train(args, train_dataset, test_dataset, model):
-
-    train_data, dev_data = train_test_split(train_dataset, test_size=0.2, random_state=args.seed)
+    train_data = train_dataset
+    _, dev_data = train_test_split(test_dataset, test_size=0.2, random_state=args.seed)
     if len(dev_data) %2 == 1:
         dev_data = dev_data[:-1]
-    if len(train_data) %2 == 1:
-        train_data = train_data[:-1]
+
 
     no_decay = ["bias", "LayerNorm.weight"]
     t_total = len(train_data) // args.batch_size * args.num_train_epochs
@@ -272,7 +271,7 @@ class Args:
         args_parser.add_argument('--max_token_chat', type=int, default=450, help='max token chat for preprocessing')
         args_parser.add_argument('--max_token_resp', type=int, default=50, help='max token response for preprocessing')
         args_parser.add_argument('--batch_size', type=int, default=40, help='total batch size')
-        args_parser.add_argument('--learning_rate', type=float, default=1e-5, help='learning rate')
+        args_parser.add_argument('--learning_rate', type=float, default=5e-6, help='learning rate')
         args_parser.add_argument('--weight_decay', type=float, default=0, help='weight decay')
         args_parser.add_argument('--adam_epsilon', type=float, default=1e-8, help='Adam optimizer epsilon')
         args_parser.add_argument('--max_grad_norm', type=float, default=1.0, help='max grad norm')
@@ -328,12 +327,14 @@ for num_sent in [4]:
     print("Train set loaded")
     logger.info(f"Training dataset loaded for num_sent = {num_sent}")
 
-    assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn'])
+    assert(args.test_language in ['su', 'su_mt', 'su_syn', 'jv', 'jv_mt', 'jv_syn', 'all'])
 
     if args.test_language in ['jv', 'jv_mt', 'jv_syn']:
         test_path = '../../dataset/test/test_jv.csv'
     elif args.test_language in ['su', 'su_mt', 'su_syn']:
         test_path = '../../dataset/test/test_su.csv'
+    elif args.test_language == 'all':
+        test_path = '../../dataset/test/test_all.csv'
     else:
         raise ValueError("Unsupported test language")
 

@@ -176,3 +176,7 @@ overgeneration_cohere.ipynb
 bangkit/
 dataset/cc.jv.300.bin
 jvsu_cloze_env/
+src/classifier/result_jv
+src/classifier/result_su
+src/generator/result_jv
+src/generator/result_su

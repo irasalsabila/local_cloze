@@ -26,15 +26,7 @@ max_seq_length = 2048 # Choose any! We auto support RoPE Scaling internally!
 dtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
 load_in_4bit = True # Use 4bit quantization to reduce memory usage. Can be False.
 
-if args.model_name == 'cendol':
-    model_name = "indonlp/cendol-llama2-7b-base"
-elif args.model_name == 'komodo':
-    model_name = "Yellow-AI-NLP/komodo-7b-base"
-elif args.model_name == 'sahabat':
-    model_name = 'GoToCompany/gemma2-9b-cpt-sahabatai-v1-base'
-else:
-    assert False, "Model name not found"
-
+model_name = args.model_name
 model, tokenizer = FastLanguageModel.from_pretrained(
     model_name = model_name,
     max_seq_length = max_seq_length,
@@ -67,6 +59,7 @@ def load_data(data_path):
     data = pd.read_csv(data_path)
     contexts = []
     endings = []
+    languages = []
     EOS_TOKEN = tokenizer.eos_token
     for idx, row in data.iterrows():
         sents = []
@@ -79,32 +72,35 @@ def load_data(data_path):
         # ending2 = row['incorrect_ending']
         contexts.append(context)
         endings.append(ending)
+        languages.append(row['language'])
 
     # convert to huggingface dataset
     from datasets import Dataset
-    dataset = Dataset.from_dict({'context': contexts, 'ending': endings})
+    dataset = Dataset.from_dict({'context': contexts, 'ending': endings, "language": languages})
     alpaca_prompt = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
-    ### Instruction:
-    Generate a single sentence ending for the given story context.
+### Instruction:
+Generate a single sentence ending for the given story context.
 
-    ### Input:
-    {}
+### Input:
+{}
 
-    ### Response:
-    {}"""
+### Response:
+{}"""
 
     def formatting_prompts_func(examples):
         contexts  = examples["context"]
         endings = examples["ending"]
+        languages = examples["language"]
         texts = []
-        for context, ending in zip(contexts, endings):
-            # chat = [
-            #     {"role": "user", "content": f"\nStory Context: {context}"},
-            #     {"role": "assistant", "content": f"{ending}"},
-            # ]
-            # text = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=False) + EOS_TOKEN
-            text = alpaca_prompt.format(context, ending) + EOS_TOKEN
+        for context, ending, language in zip(contexts, endings, languages):
+            chat = [
+                {"role": "user", "content": f"Generate a single sentence ending for the following given story context\nStory Context: ```\n{context}\n```\nJust provide single sentence in {language} language."},
+                # {"role": "user", "content": f"\nStory Context: {context}"},
+                {"role": "assistant", "content": f"{ending}"},
+            ]
+            text = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=False) + EOS_TOKEN
+            # text = alpaca_prompt.format(context, ending) + EOS_TOKEN
             texts.append(text)
         return { "text" : texts, }
     dataset = dataset.map(formatting_prompts_func, batched = True,)
@@ -125,9 +121,9 @@ trainer = SFTTrainer(
     dataset_num_proc = 2,
     packing = False, # Can make training 5x faster for short sequences.
     args = TrainingArguments(
-        per_device_train_batch_size = 8,
-        gradient_accumulation_steps = 8,
-        num_train_epochs = 2,
+        per_device_train_batch_size = 4,
+        gradient_accumulation_steps = 16,
+        num_train_epochs = 1,
         # max_steps=200,
         warmup_steps = 5,
         learning_rate = 2e-4,
