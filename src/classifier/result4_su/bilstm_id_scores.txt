@@ -1,3 +1,0 @@
-bilstm_id_score 4 --> 0.5009140767824497
-bilstm_id_score 4 --> 0.4844606946983547
-bilstm_id_score 4 --> 0.49177330895795246

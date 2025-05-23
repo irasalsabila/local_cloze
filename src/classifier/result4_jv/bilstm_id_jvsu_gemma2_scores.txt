@@ -1,3 +1,0 @@
-bilstm_id_jvsu_gemma2_score 4 --> 0.5500485908649174
-bilstm_id_jvsu_gemma2_score 4 --> 0.54421768707483
-bilstm_id_jvsu_gemma2_score 4 --> 0.5306122448979592
